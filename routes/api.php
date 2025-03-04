@@ -9,9 +9,9 @@ Route::get('/health_check', function () {
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::post('/logout', [AuthenticationController::class, 'logout']);
+    Route::get('/user', [AuthenticationController::class, 'authUser']);
 
-    Route::get('/user', function (Request $request) { return $request->user(); });
+    Route::post('/logout', [AuthenticationController::class, 'logout']);
 });
 
 

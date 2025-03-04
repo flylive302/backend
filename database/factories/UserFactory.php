@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Helpers\SignatureHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -23,11 +24,17 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $name = fake()->name();
+        $signature = SignatureHelper::generate($name);
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'signature' => $signature,
+            'phone' => fake()->e164PhoneNumber(),
+            'name' => $name,
+            'dob' => fake()->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
+            'gender' => fake()->numberBetween(1, 3),
+            'country' => strtolower(fake()->countryCode()),
+
+            'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
     }
