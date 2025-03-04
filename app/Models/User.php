@@ -65,11 +65,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function getAuthIdentifierName(): string
-    {
-        return 'phone';
-    }
-
     /**
      * Automatically convert gender string to tinyInt when setting it.
      */
