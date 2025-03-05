@@ -6,10 +6,13 @@ use App\Helpers\SignatureHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticationController extends Controller
 {
@@ -48,7 +51,7 @@ class AuthenticationController extends Controller
 
         // Hash password securely
         $validatedData['password'] = Hash::make($request->input('password'));
-        
+
         $validatedData['email'] = 'stfox302@gmail.com';
 
         // Create user
@@ -67,6 +70,31 @@ class AuthenticationController extends Controller
         return response()->json([
             'token' => $request->user()->createToken('auth_token')->plainTextToken,
         ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'confirmed', Password::defaults()]
+        ]);
+
+        $status = \Illuminate\Support\Facades\Password::reset(
+            $request->only('password', 'password_confirmation'),
+            function ($user) use ($request) {
+                $user->forceFill([
+                    'password' => Hash::make($request->password),
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        if (!$status == Password::PasswordReset) {
+            return response()->json(['message' => __($status)], 400);
+        }
+
+        return response()->json(['message' => __($status)]);
     }
 
 
