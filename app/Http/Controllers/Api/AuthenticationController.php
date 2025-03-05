@@ -75,23 +75,9 @@ class AuthenticationController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()]
         ]);
 
-        $status = \Illuminate\Support\Facades\Password::reset(
-            $request->only('password', 'password_confirmation'),
-            function ($user) use ($request) {
-                $user->forceFill([
-                    'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60),
-                ])->save();
+        $request->user()->forceFill(['password', $request->password]);
 
-                event(new PasswordReset($user));
-            }
-        );
-
-        if ($status !== \Illuminate\Support\Facades\Password::PASSWORD_RESET) {
-            return response()->json(['message' => __($status)], 400);
-        }
-
-        return response()->json(['message' => __($status)]);
+        return response()->json('Password has been changed successfully');
     }
 
 
