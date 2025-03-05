@@ -46,15 +46,12 @@ class AuthenticationController extends Controller
             'avatarFile' => ['nullable', 'file', 'mimes:jpeg,jpg,png', 'max:4050']
         ]);
 
-        // Generate signature
         $validatedData['signature'] = SignatureHelper::generate($validatedData['name']);
 
-        // Hash password securely
         $validatedData['password'] = Hash::make($request->input('password'));
 
         $validatedData['email'] = $validatedData['signature'].'@gmail.com';
 
-        // Create user
         $user = User::create($validatedData);
 
         return response()->json([
@@ -90,7 +87,7 @@ class AuthenticationController extends Controller
             }
         );
 
-        if (!$status == Password::PasswordReset) {
+        if ($status !== \Illuminate\Support\Facades\Password::PASSWORD_RESET) {
             return response()->json(['message' => __($status)], 400);
         }
 
