@@ -52,7 +52,7 @@ class AuthenticationController extends Controller
         // Hash password securely
         $validatedData['password'] = Hash::make($request->input('password'));
 
-        $validatedData['email'] = 'stfox302@gmail.com';
+        $validatedData['email'] = $validatedData['signature'].'@gmail.com';
 
         // Create user
         $user = User::create($validatedData);
