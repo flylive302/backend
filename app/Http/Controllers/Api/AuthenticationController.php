@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -43,7 +44,6 @@ class AuthenticationController extends Controller
             'gender' => ['required', 'string', 'in:male,female,others', 'lowercase'],
             'dob' => ['required', 'date', 'before:'. now()->subYears(2)->format('Y-m-d')],
             'password' => ['required', 'string', Password::defaults()], // Secure password rules
-            'avatarFile' => ['nullable', 'file', 'mimes:jpeg,jpg,png', 'max:4050']
         ]);
 
         $validatedData['signature'] = SignatureHelper::generate($validatedData['name']);
@@ -69,15 +69,49 @@ class AuthenticationController extends Controller
         ]);
     }
 
-    public function resetPassword(Request $request)
+    public function updatePassword(Request $request)
     {
-        $request->validate([
-            'password' => ['required', 'confirmed', Password::defaults()]
+        $validated = $request->validate([
+            'password' => ['required', 'string', 'confirmed', Password::defaults()],
         ]);
 
-        $request->user()->forceFill(['password', $request->password]);
+        $user = $request->user();
+        $user->password = Hash::make($validated['password']);
+        $user->save();
 
-        return response()->json('Password has been changed successfully');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password updated successfully.',
+        ]);
+    }
+
+    public function updateProfileField(Request $request): \Illuminate\Http\JsonResponse
+    {
+        // Validate only allowed fields for update
+        $rules = [
+            'name' => ['string', 'max:100'],
+            'phone' => ['string', 'max:20', 'regex:/^\+[1-9]\d{1,14}$/', 'unique:users,phone'],
+            'country' => ['string', 'size:2'],
+            'gender' => ['string', 'in:male,female,others', 'lowercase'],
+            'dob' => ['date', 'before:' . now()->subYears(2)->format('Y-m-d')],
+            'signature' => ['string', 'unique:users,signature'],
+            'password' => ['string', Password::defaults()],
+        ];
+
+        $validated = $request->validate([
+            'field' => 'required|string|in:' . implode(',', array_keys($rules)),
+            'value' => $rules[$request->input('field')],
+        ]);
+
+        $user = $request->user();
+        $field = $validated['field'];
+        $user->$field = $validated['value'];
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => ucfirst($field) . ' updated successfully.',
+        ]);
     }
 
 

@@ -13,7 +13,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('/logout', [AuthenticationController::class, 'logout']);
 
-    Route::post('reset-password', [AuthenticationController::class, 'resetPassword']);
+    Route::post('/reset-password', [AuthenticationController::class, 'updatePassword']);
+
+    Route::patch('/update-profile', [AuthenticationController::class, 'updateProfileField']);
 });
 
 
