@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
@@ -44,18 +45,18 @@ class AuthenticationController extends Controller
     {
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:100'],
-            'phone' => ['required', 'string', 'max:20', 'regex:/^\+[1-9]\d{1,14}$/', 'unique:users,phone'], // Ensures valid E.164 format
+            'phone' => ['required', 'string', 'max:20', 'regex:/^\+[1-9]\d{1,14}$/', Rule::unique('users', 'phone')], // Ensures valid E.164 format
             'country' => ['required', 'string', 'size:2'], // 2-character country code (ISO 3166-1 alpha-2)
-            'gender' => ['required', 'string', 'in:male,female,others', 'lowercase'],
-            'dob' => ['required', 'date', 'before:'. now()->subYears(2)->format('Y-m-d')],
+            'gender' => ['required', 'string', Rule::in(['male', 'female', 'others']), 'lowercase'],
+            'dob' => ['required', 'date', 'before:-18 years'],
             'password' => ['required', 'string', Password::defaults()], // Secure password rules
         ]);
 
         $validatedData['signature'] = SignatureHelper::generate($validatedData['name']);
 
-        $validatedData['password'] = Hash::make($request->input('password'));
+        $validatedData['password'] = Hash::make($validatedData['password']);
 
-        $validatedData['email'] = $validatedData['signature'].'@gmail.com';
+        $validatedData['email'] = $validatedData['signature'].'@flylive.com';
 
         $user = User::create($validatedData);
 
@@ -92,32 +93,58 @@ class AuthenticationController extends Controller
 
     public function updateProfileField(Request $request): \Illuminate\Http\JsonResponse
     {
-        // Validate only allowed fields for update
         $rules = [
             'name' => ['string', 'max:100'],
-            'phone' => ['string', 'max:20', 'regex:/^\+[1-9]\d{1,14}$/', 'unique:users,phone'],
+            'phone' => ['string', 'max:20', 'regex:/^\+[1-9]\d{1,14}$/'],
             'country' => ['string', 'size:2'],
             'gender' => ['string', 'in:male,female,others', 'lowercase'],
-            'dob' => ['date', 'before:' . now()->subYears(2)->format('Y-m-d')],
-            'signature' => ['string', 'unique:users,signature'],
+            'dob' => ['date', 'before:-18 years'],
+            'signature' => ['string'],
             'password' => ['string', Password::defaults()],
-            'avatar_image' => ['string'],
+            'avatar_image' => ['string'], // Consider changing this if it's a file
         ];
 
+        $field = $request->input('field');
+
+        if (!array_key_exists($field, $rules)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid field selected for update.',
+            ], 422);
+        }
+
+        if (in_array($field, ['phone', 'signature'])) {
+            $rules[$field][] = Rule::unique('users', $field)->ignore($request->user()->id);
+        }
+
         $validated = $request->validate([
-            'field' => 'required|string|in:' . implode(',', array_keys($rules)),
-            'value' => $rules[$request->input('field')],
+            'field' => ['required', 'string', Rule::in(array_keys($rules))],
+            'value' => $rules[$field],
         ]);
 
         $user = $request->user();
-        $field = $validated['field'];
-        $user->$field = $validated['value'];
-        $user->save();
+
+        if ($user->$field === $validated['value']) {
+            return response()->json([
+                'status' => 'success',
+                'message' => ucfirst($field) . ' is already set to this value.',
+            ]);
+        }
+
+        DB::transaction(function () use ($user, $field, $validated) {
+            if ($field === 'password') {
+                $user->password = Hash::make($validated['value']);
+            } else {
+                $user->$field = $validated['value'];
+            }
+            $user->save();
+        });
 
         return response()->json([
             'status' => 'success',
             'message' => ucfirst($field) . ' updated successfully.',
         ]);
+
     }
 
 
