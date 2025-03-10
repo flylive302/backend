@@ -35,6 +35,11 @@ class AuthenticationController extends Controller
         return $user;
     }
 
+    public function getUserById(User $user)
+    {
+        return $user;
+    }
+
     public function register(Request $request): \Illuminate\Http\JsonResponse
     {
         $validatedData = $request->validate([
@@ -96,6 +101,7 @@ class AuthenticationController extends Controller
             'dob' => ['date', 'before:' . now()->subYears(2)->format('Y-m-d')],
             'signature' => ['string', 'unique:users,signature'],
             'password' => ['string', Password::defaults()],
+            'avatar_image' => ['string'],
         ];
 
         $validated = $request->validate([

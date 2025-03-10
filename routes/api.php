@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticationController;
+use App\Http\Controllers\Api\FileUploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,11 +12,16 @@ Route::get('/health_check', function () {
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/user', [AuthenticationController::class, 'authUser']);
 
+    Route::get('/user/{user}', [AuthenticationController::class, 'getUserById']);
+
     Route::post('/logout', [AuthenticationController::class, 'logout']);
 
     Route::post('/reset-password', [AuthenticationController::class, 'updatePassword']);
 
     Route::patch('/update-profile', [AuthenticationController::class, 'updateProfileField']);
+
+    // Get Signed URL for File Uploads
+    Route::post('/signed-url', [FileUploadController::class, 'getSignedUrl']);
 });
 
 
