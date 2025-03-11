@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('phone', 20)->unique();
             $table->string('email', 255)->unique();
             $table->char('country', 2)->index();
-            $table->unsignedTinyInteger('gender')->nullable();
+            $table->unsignedTinyInteger('gender');
             $table->date('dob');
             $table->string('password', 255);
             $table->string('avatar_image')->nullable();
             $table->boolean('is_blocked')->default(false);
-            $table->timestampTz('blocked_at')->nullable();
+            $table->timestamp('blocked_at')->nullable();
             $table->string('block_reason', 255)->nullable();
             $table->string('social_provider', 50)->nullable();
             $table->string('social_provider_id', 255)->nullable();

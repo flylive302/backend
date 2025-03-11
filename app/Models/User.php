@@ -100,4 +100,14 @@ class User extends Authenticatable
     {
         $this->attributes['dob'] = $value ? Carbon::parse($value)->format('Y-m-d') : null;
     }
+
+    public function frames()
+    {
+        return $this->belongsToMany(Frame::class)->withPivot(
+            'rented_at',
+            'expires_at',
+            'quantity',
+            'is_active'
+        );
+    }
 }

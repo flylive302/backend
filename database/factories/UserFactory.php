@@ -33,7 +33,6 @@ class UserFactory extends Factory
             'dob' => fake()->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
             'gender' => fake()->numberBetween(1, 3),
             'country' => strtolower(fake()->countryCode()),
-
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
