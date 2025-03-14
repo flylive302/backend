@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100)->index();
             $table->string('signature', 50)->unique();
-            $table->string('phone', 20)->unique();
+            $table->string('phone', 20)->nullable()->unique();
             $table->string('email', 255)->unique();
-            $table->char('country', 2)->index();
-            $table->unsignedTinyInteger('gender');
-            $table->date('dob');
+            $table->char('country', 2)->nullable()->index();
+            $table->unsignedTinyInteger('gender')->nullable();
+            $table->date('dob')->nullable();
             $table->string('password', 255);
             $table->string('avatar_image')->nullable();
             $table->boolean('is_blocked')->default(false);
