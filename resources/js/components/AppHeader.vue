@@ -86,7 +86,7 @@ const rightNavItems: NavItem[] = [
                                         class="flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
                                         :class="activeItemStyles(item.href)"
                                     >
-                                        <component v-if="item.icon" :is="item.icon" class="h-5 w-5" />
+                                        <component v-if="item.icon" :is="item.icon" class="size-5" />
                                         {{ item.title }}
                                     </Link>
                                 </nav>

@@ -4,9 +4,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { MoreHorizontal } from 'lucide-vue-next'
 
 defineProps<{
-    payment: {
+    item: {
         id: string
     },
+}>()
+
+defineEmits<{
     (e: 'expand'): void
 }>()
 
@@ -25,15 +28,15 @@ function copy(id: string) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem @click="copy(payment.id)">
-                Copy payment ID
+            <DropdownMenuItem @click="copy(item.id)">
+                Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem @click="$emit('expand')">
                 Expand
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>View details</DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
 </template>

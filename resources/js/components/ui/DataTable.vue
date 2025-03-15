@@ -3,9 +3,29 @@ import {ref} from 'vue'
 import { valueUpdater } from '@/lib/utils'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input'
-import type { ColumnDef, SortingState, ColumnFiltersState,VisibilityState } from '@tanstack/vue-table'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table'
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, } from '@/components/ui/dropdown-menu'
+import type {
+    ColumnDef,
+    ColumnFiltersState,
+    SortingState,
+    VisibilityState
+} from '@tanstack/vue-table'
+
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table'
+
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+
 import {
     FlexRender,
     ExpandedState,
@@ -71,7 +91,8 @@ const table = useVueTable({
                         v-for="column in table.getAllColumns().filter((column) => column.getCanHide())" :key="column.id"
                         class="capitalize" :modelValue="column.getIsVisible()" @update:modelValue="(value) => {
                             column.toggleVisibility(!!value)
-                        }">
+                        }"
+                    >
                         {{ column.id }}
                     </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
@@ -98,14 +119,21 @@ const table = useVueTable({
                         </TableRow>
                         <TableRow v-if="row.getIsExpanded()">
                             <TableCell :colspan="row.getAllCells().length">
-                                {{ JSON.stringify(row.original) }}
+                                <TableRow>
+                                    <TableCell>Key</TableCell>
+                                    <TableCell>Value</TableCell>
+                                </TableRow>
+                                <TableRow v-for="(value, key) in row.original" :key="key">
+                                    <TableCell>{{ key }}</TableCell>
+                                    <TableCell>{{ value }}</TableCell>
+                                </TableRow>
                             </TableCell>
                         </TableRow>
                     </template>
                 </template>
                 <template v-else>
                     <TableRow>
-                        <TableCell :colspan="columns.length" class="h-24 text-center">
+                        <TableCell :colSpan="columns.length" class="h-24 text-center">
                             No results.
                         </TableCell>
                     </TableRow>

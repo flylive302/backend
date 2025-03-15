@@ -15,7 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('users', function () {
-        return Inertia::render('Users')->with('count', User::count());
+        return Inertia::render('Users', ['users' => User::all(), 'count' => User::count()]);
     })->name('users');
 
 });
