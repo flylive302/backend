@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('SANCTUM_STATEFUL_DOMAINS', 'http://localhost:3000')],
+    'allowed_origins' => ['frontend-5l4.pages.dev', 'http://localhost:3000', 'frontend-flylive302.nuxt.dev'],
 
     'allowed_origins_patterns' => [],
 
