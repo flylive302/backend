@@ -9,26 +9,14 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import {Card, CardContent, CardHeader} from "@/components/ui/card";
-
-import {
-    NumberField,
-    NumberFieldContent,
-    NumberFieldDecrement,
-    NumberFieldIncrement,
-    NumberFieldInput,
-} from '@/components/ui/number-field'
+import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput, } from '@/components/ui/number-field'
 import Avatar from '@/components/Avatar.vue';
-
-interface Props {
-    status?: string;
-}
-
-defineProps<Props>();
+import TimePicker from '@/components/TimePicker.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Frame Create',
-        href: route('frames.create'),
+        href: route('frame.create'),
     },
 ];
 
@@ -39,10 +27,11 @@ const form = useForm({
     static_src: '',
     animated_src: '',
     status: 0,
+    valid_duration: null
 });
 
 const submit = () => {
-    form.patch(route('profile.update'), {
+    form.post(route('frame.store'), {
         preserveScroll: true,
     });
 };
@@ -120,6 +109,11 @@ const submit = () => {
                             class="mt-1 block w-full" @blur="(event: InputEvent) => form.animated_src = (event.target as HTMLInputElement).value"
                         />
                         <InputError class="mt-2" :message="form.errors.animated_src" />
+                    </div>
+
+                    <div class="grid gap-2">
+                        <p>{{form.valid_duration}} in parent</p>
+                        <TimePicker @update:totalTime="(event) => form.valid_duration = event" />
                     </div>
 
                     <div class="flex items-center gap-4">

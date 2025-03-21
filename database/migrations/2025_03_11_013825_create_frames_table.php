@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('frames', function (Blueprint $table) {
+        Schema::create('frame', function (Blueprint $table) {
             $table->id();
             $table->string('name', 60)->unique();
             $table->decimal('price');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('frames');
+        Schema::dropIfExists('frame');
     }
 };

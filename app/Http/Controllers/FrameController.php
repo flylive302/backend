@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FrameCreateRequest;
 use App\Models\Frame;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,7 +14,7 @@ class FrameController extends Controller
      */
     public function index()
     {
-        return Inertia::render('frames/Index', ['frames' => Frame::all(), 'count' => Frame::count()]);
+        return Inertia::render('frame/Index', ['frames' => Frame::all(), 'count' => Frame::count()]);
     }
 
     /**
@@ -21,15 +22,17 @@ class FrameController extends Controller
      */
     public function create()
     {
-        return Inertia::render('frames/Create');
+        return Inertia::render('frame/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(FrameCreateRequest $request)
     {
-        //
+        Frame::create($request->validated());
+
+        return redirect()->route('frame.index');
     }
 
     /**

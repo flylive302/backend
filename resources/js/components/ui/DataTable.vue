@@ -103,7 +103,7 @@ const table = useVueTable({
             </DropdownMenu>
 
             <Button as-child class="ml-2">
-                <Link v-if="createNewPage" :href="route('frames.create')">
+                <Link v-if="createNewPage" :href="route('frame.create')">
                     Create New
                 </Link>
             </Button>

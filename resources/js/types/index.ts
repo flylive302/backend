@@ -50,7 +50,7 @@ export interface User {
     updated_at: string;
 }
 
-export interface Frames {
+export interface Frame {
     id: number;
     name: string;
     price: number;

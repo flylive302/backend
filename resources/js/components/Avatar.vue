@@ -43,7 +43,7 @@ const urlEndpoint = 'https://ik.imagekit.io/flylive/'
 
             <SvgaPlayer
                 v-if="isAnimated"
-                name="ladies-frame"
+                :name="frameSrc"
                 :loop="0" class="absolute"
                 :canvas_width="`${size + frameDifference}rem`"
                 :canvas_height="`${size + frameDifference}rem`"
@@ -60,12 +60,3 @@ const urlEndpoint = 'https://ik.imagekit.io/flylive/'
 
   </Link>
 </template>
-
-
-<!--
-
-
-:canvas_width="`${frameDifference}rem`"
-:canvas_height="`${frameDifference}rem`"
-
--->

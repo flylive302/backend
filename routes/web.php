@@ -15,7 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Users', ['users' => User::all(), 'count' => User::count()]);
     })->name('users');
 
-    Route::resource('frames', FrameController::class);
+    Route::resource('frame', FrameController::class);
 
 });
 

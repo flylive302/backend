@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 <template>
     <Card>
         <CardHeader>
-            <CardTitle>Total Number of Users in the App </CardTitle>
+            <CardTitle> Total Number of Users in the App </CardTitle>
         </CardHeader>
         <CardContent class="h-full text-3xl">
             <slot />

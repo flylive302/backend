@@ -6,13 +6,12 @@ import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import CountAllUsers from '@/components/user/CountAllUsers.vue';
 import { columns } from '@/components/frames/columns';
 import type { ColumnDef } from '@tanstack/vue-table';
-import type { Frames } from '@/types';
 import DataTable from '@/components/ui/DataTable.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Frames',
-        href: route('frames.index'),
+        href: route('frame.index'),
     },
 ];
 
@@ -38,7 +37,7 @@ defineProps({
                 <CountAllUsers> {{ count }} </CountAllUsers>
 
                 <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
+
                 </div>
 
                 <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
@@ -46,10 +45,10 @@ defineProps({
                 </div>
             </div>
             <DataTable
-                :columns="columns as ColumnDef<unknown, Frames>[]"
+                :columns="columns as ColumnDef<unknown, unknown>[]"
                 :data="frames"
                 filterOn="name"
-                :createNewPage="route('frames.create')"
+                :createNewPage="route('frame.create')"
             />
         </div>
     </AppLayout>
