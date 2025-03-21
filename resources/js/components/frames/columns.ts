@@ -4,10 +4,10 @@ import { ArrowUpDown } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Avatar } from '@/components/ui/avatar';
-import {User} from "@/types";
+import {Frames} from "@/types";
 import {ColumnDef} from "@tanstack/vue-table";
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Frames>[] = [
     {
         id: 'select',
         header: ({ table }) => h(Checkbox, {
@@ -24,10 +24,10 @@ export const columns: ColumnDef<User>[] = [
         enableHiding: true,
     },
     {
-        id: 'avatar_img',
-        header: ({ table }) => h('div', 'Avatar'),
+        id: 'static_src',
+        header: ({ table }) => h('div', 'Frame'),
         cell: ({ row }) => h(Avatar, {}, () => [
-            h('AvatarImage', { src: row.getValue('avatar_img'), alt: '@unovue' }),
+            h('AvatarImage', { src: row.getValue('static_src'), alt: '@unovue' }),
             h('AvatarFallback', {}, (() => {
                 const name = row.getValue('name') as string | undefined;
                 return typeof name === 'string' ? name.split(' ').map(n => n[0]).join('') : '';
@@ -50,26 +50,23 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ row }) => h('div', row.getValue('name')),
     },
     {
-        accessorKey: 'email',
-        header: ({ column }) => {
-            return h(Button, {
-                variant: 'ghost',
-                onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-            }, () => ['Email', h(ArrowUpDown, { class: 'ml-2 h-4 w-4' })])
-        },
-        cell: ({ row }) => h('div', { class: 'lowercase' }, row.getValue('email')),
-    },
-    {
-        accessorKey: 'coin_balance',
-        header: () => h('div', 'Coin Balance'),
+        accessorKey: 'price',
+        header: () => h('div', 'Price'),
         cell: ({ row }) => {
-            const amount = Number.parseFloat(row.getValue('coin_balance'))
+            const amount = Number.parseFloat(row.getValue('price'))
             const formatted = new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD',
             }).format(amount)
 
             return h('div', { class: 'font-medium' }, formatted)
+        },
+    },
+    {
+        accessorKey: 'valid_duration',
+        header: () => h('div', 'Valid Duration'),
+        cell: ({ row }) => {
+            return h('div', { class: 'font-medium' }, Number.parseFloat(row.getValue('valid_duration')))
         },
     },
 

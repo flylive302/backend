@@ -26,9 +26,38 @@ export interface SharedData extends PageProps {
 export interface User {
     id: number;
     name: string;
+    signature: string;
+    phone?: string | null;
     email: string;
-    avatar?: string;
+    country?: string | null;
+    gender?: number | null;
+    dob?: string | null;
+    password: string;
+    avatar_image?: string | null;
+    is_blocked: boolean;
+    blocked_at?: string | null;
+    block_reason?: string | null;
+    social_provider?: string | null;
+    social_provider_id?: string | null;
+    coin_balance: number;
+    diamond_balance: number;
+    wealth_xp: number;
+    charm_xp: number;
+    room_xp: number;
+    deleted_at?: string | null;
     email_verified_at: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Frames {
+    id: number;
+    name: string;
+    price: number;
+    static_src: string;
+    animated_src: string;
+    valid_duration: number;
+    status: number;
     created_at: string;
     updated_at: string;
 }

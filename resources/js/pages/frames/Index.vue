@@ -4,14 +4,15 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import CountAllUsers from '@/components/user/CountAllUsers.vue';
-import { columns } from '@/components/user/columns';
+import { columns } from '@/components/frames/columns';
 import type { ColumnDef } from '@tanstack/vue-table';
+import type { Frames } from '@/types';
 import DataTable from '@/components/ui/DataTable.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Users',
-        href: '/users',
+        title: 'Frames',
+        href: route('frames'),
     },
 ];
 
@@ -20,7 +21,7 @@ defineProps({
         type: Number,
         required: true,
     },
-    users: {
+    frames: {
         type: Array,
         required: true,
     }
@@ -28,7 +29,7 @@ defineProps({
 
 </script>
 <template>
-    <Head title="Users" />
+    <Head title="Frames" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -44,7 +45,7 @@ defineProps({
                     <PlaceholderPattern />
                 </div>
             </div>
-            <DataTable :columns="columns as ColumnDef<unknown, unknown>[]" :data="users" filterOn="email" />
+            <DataTable :columns="columns as ColumnDef<unknown, Frames>[]" :data="frames" filterOn="name" />
         </div>
     </AppLayout>
 </template>

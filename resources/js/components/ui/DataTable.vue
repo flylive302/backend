@@ -40,7 +40,8 @@ import {
 
 const props = defineProps<{
     columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+    data: TData[],
+    filterOn?: string;
 }>()
 
 const sorting = ref<SortingState>([])
@@ -76,9 +77,10 @@ const table = useVueTable({
     <div class="border rounded-md">
         <div class="flex items-center p-4">
             <Input
-                class="max-w-sm" placeholder="Filter emails..."
-                :model-value="table.getColumn('email')?.getFilterValue() as string"
-                @update:model-value=" table.getColumn('email')?.setFilterValue($event)"
+                v-if="filterOn"
+                class="max-w-sm" :placeholder="`Filter ${filterOn}...`"
+                :model-value="table.getColumn(filterOn)?.getFilterValue() as string"
+                @update:model-value=" table.getColumn(filterOn)?.setFilterValue($event)"
             />
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
