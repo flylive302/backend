@@ -32,15 +32,15 @@ export const columns: ColumnDef<Frame>[] = [
             }, () => ['Frame', h(ArrowUpDown)])
         },
         cell: ({ row }) => h(Avatar, {
-            frameSrc: row.getValue('animated_src'),
+            frameSrc: String(row.getValue('animated_src') || ''),
             profileSrc: '/default-image.jpg',
             frameSize: 100,
             profileSize: 100,
             alt: 'Fly Live Frame',
             isAnimated: true,
-            size: 4,
-            profileDifference: 0.6,
-            frameDifference: 1.3,
+            size: 4 as number,
+            profileDifference: 0.6 as number,
+            frameDifference: 1.3 as number,
         }),
     },
     {

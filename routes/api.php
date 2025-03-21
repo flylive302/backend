@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\FileUploadController;
+use App\Models\Frame;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // Get Signed URL for File Uploads
     Route::post('/signed-url', [FileUploadController::class, 'getSignedUrl']);
+
+    Route::get('/frames', function () {
+        return response()->json(['frames' => Frame::all()]);
+    });
 });
 
 
