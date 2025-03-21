@@ -2,6 +2,7 @@
 import {ref} from 'vue'
 import { valueUpdater } from '@/lib/utils'
 import { Button } from '@/components/ui/button';
+import { Link } from '@inertiajs/vue3';
 import { Input } from '@/components/ui/input'
 import type {
     ColumnDef,
@@ -42,6 +43,7 @@ const props = defineProps<{
     columns: ColumnDef<TData, TValue>[]
     data: TData[],
     filterOn?: string;
+    createNewPage?: string;
 }>()
 
 const sorting = ref<SortingState>([])
@@ -99,6 +101,12 @@ const table = useVueTable({
                     </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+            <Button as-child class="ml-2">
+                <Link v-if="createNewPage" :href="route('frames.create')">
+                    Create New
+                </Link>
+            </Button>
         </div>
         <Table>
             <TableHeader>

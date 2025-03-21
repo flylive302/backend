@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Frame;
+use App\Http\Controllers\FrameController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,9 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Users', ['users' => User::all(), 'count' => User::count()]);
     })->name('users');
 
-    Route::get('frames', function () {
-        return Inertia::render('frames/Index', ['frames' => Frame::all(), 'count' => Frame::count()]);
-    })->name('frames');
+    Route::resource('frames', FrameController::class);
 
 });
 

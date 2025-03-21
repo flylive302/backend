@@ -12,7 +12,7 @@ import DataTable from '@/components/ui/DataTable.vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Frames',
-        href: route('frames'),
+        href: route('frames.index'),
     },
 ];
 
@@ -45,7 +45,12 @@ defineProps({
                     <PlaceholderPattern />
                 </div>
             </div>
-            <DataTable :columns="columns as ColumnDef<unknown, Frames>[]" :data="frames" filterOn="name" />
+            <DataTable
+                :columns="columns as ColumnDef<unknown, Frames>[]"
+                :data="frames"
+                filterOn="name"
+                :createNewPage="route('frames.create')"
+            />
         </div>
     </AppLayout>
 </template>

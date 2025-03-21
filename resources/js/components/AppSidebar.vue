@@ -21,7 +21,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Frames',
-        href: route('frames'),
+        href: route('frames.index'),
         icon: Frame,
     },
 ];
