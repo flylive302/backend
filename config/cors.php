@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['frontend-5l4.pages.dev', 'http://localhost:3000', 'frontend-flylive302.nuxt.dev'],
+    'allowed_origins' => ['https://frontend-5l4.pages.dev', 'http://localhost:3000', 'https://frontend-flylive302.nuxt.dev'],
 
     'allowed_origins_patterns' => [],
 
