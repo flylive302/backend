@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Frame;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use function Laravel\Prompts\error;
 
 class FrameController extends Controller
@@ -63,7 +64,10 @@ class FrameController extends Controller
 
     public function activate(Frame $frame): \Illuminate\Http\JsonResponse
     {
-        auth()->user()->frames()->where('is_active', true)->update(['is_active' => false]);
+        DB::table('frame_user')->where('user_id', auth()->id())->where('is_active', true)->update([
+                'is_active' => false,
+                'updated_at' => now()
+        ]);
         auth()->user()->frames()->updateExistingPivot($frame->id, ['is_active' => true]);
 
         return response()->json([
