@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -39,7 +40,9 @@ class User extends Authenticatable
         'frame_id',
         'deleted_at',
         'name',
-        'avatar_url'
+        'avatar_url',
+        'coin_balance',
+        'diamond_balance'
     ];
 
     /**
@@ -108,5 +111,15 @@ class User extends Authenticatable
             'quantity',
             'is_active'
         )->withTimestamps();
+    }
+
+    public function initiatedTransactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
+
+    public function receivedTransactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'beneficiary_id');
     }
 }

@@ -23,11 +23,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 const form = useForm({
     name: '',
     price: 0,
-    valid_duration: 0,
+    valid_duration: null as number | null,
     static_src: '',
     animated_src: '',
-    status: 0,
-    valid_duration: null
+    status: 0
 });
 
 const submit = () => {

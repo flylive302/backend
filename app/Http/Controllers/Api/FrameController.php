@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Frame;
+use App\Models\Transaction;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -52,6 +54,29 @@ class FrameController extends Controller
             'expires_at' => $newExpiry,
         ];
 
+        $changeInValue = $frame->price * $updateData['quantity'];
+        $afterTransaction = $user->coin_balance - $changeInValue;
+
+        Transaction::create([
+            'user_id'             => $user->id,
+            'beneficiary_id'      => $user->id,
+            'transactionable_id'  => $frame->id,
+            'transactionable_type'=> Frame::class,
+            'currency_type'       => 1,
+            'quantity'            => $updateData['quantity'],
+            'real_value'          => $frame->price,
+            'change_in_value'     => $changeInValue,
+            'before'              => $user->coin_balance,
+            'after'               => $afterTransaction,
+            'status'              => 1,
+        ]);
+
+        $user->update([
+            'coin_balance' => $afterTransaction
+        ]);
+
+        $user->save();
+
         // Update or attach frame to user
         if ($existingFrame) {
             $user->frames()->updateExistingPivot($frame->id, $updateData);
@@ -62,7 +87,7 @@ class FrameController extends Controller
         return response()->json(['message' => 'Frame attached to user successfully.']);
     }
 
-    public function activate(Frame $frame): \Illuminate\Http\JsonResponse
+    public function activate(Frame $frame): JsonResponse
     {
         DB::table('frame_user')->where('user_id', auth()->id())->where('is_active', true)->update([
                 'is_active' => false,
