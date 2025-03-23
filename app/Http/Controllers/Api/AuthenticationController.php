@@ -33,6 +33,8 @@ class AuthenticationController extends Controller
 
         $user['permissions'] = $permissionNames;
 
+        $user['active_frame'] = $user->frames()->where('is_active', true)->first();
+
         return $user;
     }
 

@@ -19,13 +19,16 @@ class Frame extends Model
         'status',
     ];
 
+    protected $casts = [
+        'expires_at' => 'datetime',
+    ];
+
     public function users()
     {
         return $this->belongsToMany(User::class)->withPivot(
-            'rented_at',
             'expires_at',
             'quantity',
             'is_active'
-        );
+        )->withTimestamps();
     }
 }

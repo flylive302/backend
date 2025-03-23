@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('frame', function (Blueprint $table) {
+        Schema::create('frames', function (Blueprint $table) {
             $table->id();
             $table->string('name', 60)->unique();
             $table->decimal('price');
             $table->string('static_src', 255);
             $table->string('animated_src', 255);
-            $table->unsignedBigInteger('valid_duration');
+            $table->unsignedBigInteger('valid_duration')->nullable();
             $table->unsignedTinyInteger('status')->default(1);
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('frame');
+        Schema::dropIfExists('frames');
     }
 };

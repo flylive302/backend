@@ -104,10 +104,9 @@ class User extends Authenticatable
     public function frames()
     {
         return $this->belongsToMany(Frame::class)->withPivot(
-            'rented_at',
             'expires_at',
             'quantity',
             'is_active'
-        );
+        )->withTimestamps();
     }
 }

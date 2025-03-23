@@ -2,8 +2,7 @@
 
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\FileUploadController;
-use App\Models\Frame;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\FrameController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health_check', function () {
@@ -11,21 +10,27 @@ Route::get('/health_check', function () {
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('/user', [AuthenticationController::class, 'authUser']);
+    Route::controller(AuthenticationController::class)->group(function () {
+        Route::get('/user', 'authUser');
 
-    Route::get('/user/{user}', [AuthenticationController::class, 'getUserById']);
+        Route::get('/user/{user}', 'getUserById');
 
-    Route::post('/logout', [AuthenticationController::class, 'logout']);
+        Route::post('/logout', 'logout');
 
-    Route::post('/reset-password', [AuthenticationController::class, 'updatePassword']);
+        Route::post('/reset-password', 'updatePassword');
 
-    Route::patch('/update-profile', [AuthenticationController::class, 'updateProfileField']);
+        Route::patch('/update-profile', 'updateProfileField');
+    });
 
     // Get Signed URL for File Uploads
     Route::post('/signed-url', [FileUploadController::class, 'getSignedUrl']);
 
-    Route::get('/frames', function () {
-        return response()->json(['frames' => Frame::all()]);
+    Route::controller(FrameController::class)->group(function () {
+        Route::get('/frame/all', 'getFrames')->name('frame.getFrames');
+        Route::get('/frame/my-frames', 'getMyFrames')->name('frame.getMyFrames');
+
+        Route::post('/frame/{frame}/purchase', 'purchase')->name('frame.purchase');
+        Route::post('/frame/{frame}/activate', 'activate')->name('frame.activate');
     });
 });
 

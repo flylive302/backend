@@ -27,7 +27,7 @@ class FrameCreateRequest extends FormRequest
             'price' => ['required', 'numeric'],
             'static_src' => ['required', 'string', 'max:255'],
             'animated_src' => ['required', 'string', 'max:255'],
-            'valid_duration' => ['required', 'integer', 'min:0'],
+            'valid_duration' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'integer']
         ];
     }

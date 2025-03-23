@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('frame_user', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('frame_id')->constrained()->cascadeOnDelete();
-            $table->timestamp('rented_at');
-            $table->dateTime('expires_at');
+            $table->dateTime('expires_at')->nullable();
             $table->unsignedSmallInteger('quantity')->default(1);
             $table->boolean('is_active')->default(false);
+            $table->timestamps();
         });
     }
 
