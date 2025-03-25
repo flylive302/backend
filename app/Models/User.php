@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,7 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasApiTokens, SoftDeletes, HasRoles;
 
     /**
@@ -56,19 +57,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
-    /**
      * Automatically convert gender string to tinyInt when setting it.
      */
     public function setGenderAttribute($value): void
@@ -99,7 +87,7 @@ class User extends Authenticatable
     /**
      * Mutator: Convert `dob` to `Y-m-d` before saving to database.
      */
-    public function setDobAttribute($value)
+    public function setDobAttribute($value): void
     {
         $this->attributes['dob'] = $value ? Carbon::parse($value)->format('Y-m-d') : null;
     }
@@ -121,5 +109,18 @@ class User extends Authenticatable
     public function receivedTransactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'beneficiary_id');
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }
