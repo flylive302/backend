@@ -1,11 +1,12 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -51,6 +52,17 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        User::create([
+            'name' => 'Admin user',
+            'phone' => '+923005274302',
+            'email' => 'admin@flylive.com',
+            'gender' => 'male',
+            'dob' => '1999-01-01',
+            'country' => 'pk',
+            'password' => Hash::make('password'),
+            'signature' => '@admin',
+        ]);
     }
 
     /**

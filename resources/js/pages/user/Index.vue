@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
@@ -11,20 +11,18 @@ import DataTable from '@/components/ui/DataTable.vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Users',
-        href: '/users',
-    },
+        href: '/users'
+    }
 ];
 
-defineProps({
-    count: {
-        type: Number,
-        required: true,
-    },
+const props = defineProps({
     users: {
         type: Array,
-        required: true,
+        required: true
     }
 });
+
+const count = props.users.length;
 
 </script>
 <template>
@@ -34,13 +32,15 @@ defineProps({
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
 
-                <CountAllUsers> {{ count }} </CountAllUsers>
+                <CountAllUsers> {{ count }}</CountAllUsers>
 
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                <div
+                    class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                     <PlaceholderPattern />
                 </div>
 
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                <div
+                    class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                     <PlaceholderPattern />
                 </div>
             </div>

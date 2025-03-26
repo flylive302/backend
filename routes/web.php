@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\FrameController;
-use App\Models\User;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::inertia('/', 'Welcome')->name('home');
 
@@ -11,14 +10,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 
-    Route::get('users', function () {
-        return Inertia::render('Users', ['users' => User::all(), 'count' => User::count()]);
-    })->name('users');
+    Route::controller(UserController::class)->group(function () {
+        Route::get('users', 'index')->name('users');
 
-//    Route::controller(FrameController::class)->group(function () {
-//        Route::get('/frames', 'index')->name('frame.index');
-//        Route::get('/frames/create', 'create')->name('frame.create');
-//    });
+        Route::get('users/{user}', 'show')->name('users.show');
+    });
 
     Route::resource('frame', FrameController::class);
 
