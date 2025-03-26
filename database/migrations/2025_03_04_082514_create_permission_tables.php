@@ -131,17 +131,20 @@ return new class extends Migration {
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
             ->forget(config('permission.cache.key'));
 
-        $role = Role::firstOrCreate(['name' => 'admin']);
-        $role2 = Role::firstOrCreate(['name' => 'reseller']);
-        $permission1 = Permission::firstOrCreate(['name' => 'viewAny:user']);
-        $permission2 = Permission::firstOrCreate(['name' => 'createAny:user']);
-        $permission3 = Permission::firstOrCreate(['name' => 'sendCoins:user']);
+        Permission::firstOrCreate(['name' => 'viewAny:user']);
+        Permission::firstOrCreate(['name' => 'sendCoins:user']);
+        Permission::firstOrCreate(['name' => 'acceptRequest:coinDisbursement']);
+        Permission::firstOrCreate(['name' => 'requestCoins:user']);
 
-        $role->givePermissionTo($permission1, $permission2, $permission3);
-        $role2->givePermissionTo($permission3);
+        $role = Role::firstOrCreate(['name' => 'admin'])->givePermissionTo([
+            'viewAny:user', 'acceptRequest:coinDisbursement', 'sendCoins:user'
+        ]);
+        $role2 = Role::firstOrCreate(['name' => 'reseller'])->givePermissionTo([
+            'sendCoins:user', 'requestCoins:user'
+        ]);
 
-        $user = User::find(1);
-        $user->assignRole($role, $role2);
+        User::find(1)->assignRole($role);
+        User::find(2)->assignRole($role2);
     }
 
     /**

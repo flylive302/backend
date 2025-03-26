@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/composables/useInitials';
 import type { User } from '@/types';
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    showEmail: false,
+    showEmail: false
 });
 
 const { getInitials } = useInitials();
@@ -21,7 +21,8 @@ const showAvatar = computed(() => props.user.avatar_image && props.user.avatar_i
 
 <template>
     <Avatar class="h-8 w-8 overflow-hidden rounded-lg">
-        <AvatarImage v-if="showAvatar" :src="user.avatar_image" :alt="user.name" />
+        <AvatarImage v-if="showAvatar" :alt="user.name"
+                     :src="`https://ik.imagekit.io/flylive/${user.avatar_image}` || ''" />
         <AvatarFallback class="rounded-lg text-black dark:text-white">
             {{ getInitials(user.name) }}
         </AvatarFallback>

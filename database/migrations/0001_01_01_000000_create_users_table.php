@@ -60,8 +60,19 @@ return new class extends Migration {
             'gender' => 'male',
             'dob' => '1999-01-01',
             'country' => 'pk',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('admin@flylive.com'),
             'signature' => '@admin',
+        ]);
+
+        User::create([
+            'name' => 'Reseller user',
+            'phone' => '+923005274303',
+            'email' => 'reseller@flylive.com',
+            'gender' => 'male',
+            'dob' => '1999-01-01',
+            'country' => 'pk',
+            'password' => Hash::make('reseller@flylive.com'),
+            'signature' => '@reseller',
         ]);
     }
 
