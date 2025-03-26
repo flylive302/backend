@@ -15,6 +15,7 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon;
     isActive?: boolean;
+    canAccess?: boolean;
 }
 
 export interface SharedData extends PageProps {
@@ -44,6 +45,7 @@ export interface User {
     wealth_xp: number;
     charm_xp: number;
     room_xp: number;
+    roles?: string[];
     deleted_at?: string | null;
     email_verified_at: string | null;
     created_at: string;

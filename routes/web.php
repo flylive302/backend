@@ -3,12 +3,19 @@
 use App\Http\Controllers\FrameController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::inertia('/', 'Welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::get('/dashboard', function () {
+        if (auth()->user()->hasRole('admin')) {
+            return Inertia::render('Dashboard');
+        } else {
+            return Inertia::render('reseller/Index');
+        }
+    })->name('dashboard');
 
     Route::controller(UserController::class)->group(function () {
         Route::get('users', 'index')->name('users');

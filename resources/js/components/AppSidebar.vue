@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import NavFooter from '@/components/NavFooter.vue';
-import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import {
     Sidebar,
@@ -12,25 +11,31 @@ import {
     SidebarMenuItem
 } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, Folder, Frame, LayoutGrid, UsersIcon } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import { computed } from 'vue';
+import NavMain from '@/components/NavMain.vue';
 
+const can = computed(() => usePage().props.can as Record<string, boolean>);
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
-        icon: LayoutGrid
+        icon: LayoutGrid,
+        canAccess: true
     },
     {
         title: 'Users',
         href: '/users',
-        icon: UsersIcon
+        icon: UsersIcon,
+        canAccess: can.value.viewAnyUser
     },
     {
         title: 'Frames',
         href: route('frame.index'),
-        icon: Frame
+        icon: Frame,
+        canAccess: can.value.viewAnyFrame
     }
 ];
 
