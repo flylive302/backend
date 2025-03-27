@@ -41,7 +41,7 @@ class User extends Authenticatable
         'frame_id',
         'deleted_at',
         'name',
-        'avatar_url',
+        'avatar_image',
         'coin_balance',
         'diamond_balance'
     ];
@@ -109,6 +109,16 @@ class User extends Authenticatable
     public function receivedTransactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'beneficiary_id');
+    }
+
+    public function coinRequests()
+    {
+        return $this->hasMany(CoinRequest::class, 'user_id');
+    }
+
+    public function coinRequestedFromMe()
+    {
+        return $this->hasMany(CoinRequest::class, 'requested_from');
     }
 
     /**

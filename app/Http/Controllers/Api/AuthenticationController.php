@@ -6,15 +6,13 @@ use App\Helpers\SignatureHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Models\Permission;
 
 class AuthenticationController extends Controller
 {
@@ -23,17 +21,13 @@ class AuthenticationController extends Controller
     {
         $user = $request->user();
 
-        $permissionNames = DB::table('permissions as p')
-            ->join('role_has_permissions as rp', 'p.id', '=', 'rp.permission_id')
-            ->join('model_has_roles as mr', 'rp.role_id', '=', 'mr.role_id')
-            ->where('mr.model_id', $user->id)
-            ->where('mr.model_type', $user->getMorphClass())
-            ->distinct()
-            ->pluck('p.name');
+        $user['can'] = $user?->getPermissionsViaRoles()
+            ->map(function (Permission $permission): array {
+                return [$permission['name'] => auth()->user()->can($permission['name'])];
+            })
+            ->collapse()->all();
 
-        $user['permissions'] = $permissionNames;
-
-        $user['active_frame'] = $user->frames()->where('is_active', true)->first();
+        $user['active_frame'] = $user->where('is_active', true)->first();
 
         return $user;
     }
@@ -43,11 +37,12 @@ class AuthenticationController extends Controller
         return $user;
     }
 
-    public function register(Request $request): \Illuminate\Http\JsonResponse
+    public function register(Request $request): JsonResponse
     {
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:100'],
-            'phone' => ['required', 'string', 'max:20', 'regex:/^\+[1-9]\d{1,14}$/', Rule::unique('users', 'phone')], // Ensures valid E.164 format
+            'phone' => ['required', 'string', 'max:20', 'regex:/^\+[1-9]\d{1,14}$/', Rule::unique('users', 'phone')],
+            // Ensures valid E.164 format
             'country' => ['required', 'string', 'size:2'], // 2-character country code (ISO 3166-1 alpha-2)
             'gender' => ['required', 'string', Rule::in(['male', 'female', 'others']), 'lowercase'],
             'dob' => ['required', 'date', 'before:-18 years'],
@@ -68,7 +63,7 @@ class AuthenticationController extends Controller
     }
 
 
-    public function login(ApiLoginRequest $request): \Illuminate\Http\JsonResponse
+    public function login(ApiLoginRequest $request): JsonResponse
     {
         $request->authenticate();
 
@@ -93,7 +88,7 @@ class AuthenticationController extends Controller
         ]);
     }
 
-    public function updateProfileField(Request $request): \Illuminate\Http\JsonResponse
+    public function updateProfileField(Request $request): JsonResponse
     {
         $rules = [
             'name' => ['string', 'max:100'],
@@ -129,7 +124,7 @@ class AuthenticationController extends Controller
         if ($user->$field === $validated['value']) {
             return response()->json([
                 'status' => 'success',
-                'message' => ucfirst($field) . ' is already set to this value.',
+                'message' => ucfirst($field).' is already set to this value.',
             ]);
         }
 
@@ -144,13 +139,13 @@ class AuthenticationController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => ucfirst($field) . ' updated successfully.',
+            'message' => ucfirst($field).' updated successfully.',
         ]);
 
     }
 
 
-    public function logout(Request $request): \Illuminate\Http\JsonResponse
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->tokens()->delete();
 

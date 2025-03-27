@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\CoinRequest;
+use App\Models\User;
+
+class CoinRequestPolicy
+{
+    /**
+     * Determine whether the user can view any models (Admin only).
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->hasPermissionTo('viewAnyCoinRequest');
+    }
+
+    /**
+     * Determine whether the user can view a specific model.
+     */
+    public function view(User $user, CoinRequest $coinRequest): bool
+    {
+        if ($user->hasPermissionTo('viewAnyCoinRequest')) {
+            return true;
+        }
+
+        return $user->id === $coinRequest->user_id;
+    }
+
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        return $user->hasPermissionTo('createCoinRequest');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, CoinRequest $coinRequest): bool
+    {
+        return $user->hasPermissionTo('updateCoinRequest');
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, CoinRequest $coinRequest): bool
+    {
+        return false;
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, CoinRequest $coinRequest): bool
+    {
+        return false;
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, CoinRequest $coinRequest): bool
+    {
+        return false;
+    }
+}

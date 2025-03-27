@@ -64,4 +64,21 @@ export interface Frame {
     updated_at: string;
 }
 
+export interface CoinRequests {
+    id: number;
+    user_id: number;
+    requested_from: number;
+    updated_by: number;
+    status: number;
+    created_at: string;
+    updated_at: string;
+    type: number;
+    amount: number;
+    message?: string;
+    proof_1?: string;
+    proof_2?: string;
+    proof_3?: string;
+    credit_days?: number,
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

@@ -131,22 +131,28 @@ return new class extends Migration {
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
             ->forget(config('permission.cache.key'));
 
-        Permission::firstOrCreate(['name' => 'viewAnyUser']);
-        Permission::firstOrCreate(['name' => 'viewUser']);
-        Permission::firstOrCreate(['name' => 'viewAnyFrame']);
-        Permission::firstOrCreate(['name' => 'sendCoinsUser']);
-        Permission::firstOrCreate(['name' => 'acceptRequestCoinDisbursement']);
-        Permission::firstOrCreate(['name' => 'requestCoinsUser']);
+        $permissions = [
+            'viewAnyUser', 'viewUser', 'viewAnyFrame', 'sendCoinsUser',
+            'viewAnyCoinRequest', 'createCoinRequest', 'updateCoinRequest'
+        ];
 
-        $role = Role::firstOrCreate(['name' => 'admin'])->givePermissionTo([
-            'viewAnyUser', 'acceptRequestCoinDisbursement', 'sendCoinsUser', 'viewAnyFrame', 'viewUser',
-        ]);
-        $role2 = Role::firstOrCreate(['name' => 'reseller'])->givePermissionTo([
-            'sendCoinsUser', 'requestCoinsUser'
-        ]);
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
 
-        User::find(1)->assignRole($role);
-        User::find(2)->assignRole($role2);
+        $adminPermissions = [
+            'viewAnyUser', 'viewUser',
+            'viewAnyCoinRequest', 'updateCoinRequest',
+            'viewAnyFrame',
+        ];
+
+        $resellerPermissions = ['viewAnyCoinRequest', 'createCoinRequest'];
+
+        Role::firstOrCreate(['name' => 'admin'])->givePermissionTo($adminPermissions);
+        Role::firstOrCreate(['name' => 'reseller'])->givePermissionTo($resellerPermissions);
+
+        User::find(1)?->assignRole('admin');
+        User::find(2)?->assignRole('reseller');
     }
 
     /**

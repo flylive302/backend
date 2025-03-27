@@ -40,6 +40,14 @@ const excludedKeys = [
 
 </script>
 
+<style scoped>
+.frame-card {
+    @apply bg-foreground/10 shadow-md focus:bg-secondary/10 dark:focus:bg-secondary/20
+    focus:shadow-inner focus:ring focus:ring-primary/50 text-center cursor-pointer rounded-sm overflow-hidden
+    transition-all duration-300 ease-in-out m-2;
+}
+</style>
+
 <template>
     <Head title="Users Show - {{ user.name }}" />
     <AppLayout :breadcrumbs="breadcrumbs">
@@ -98,7 +106,7 @@ const excludedKeys = [
                                 <TableRow v-for="role in user?.roles" :key="role.id">
                                     <TableCell>{{ role.name }}</TableCell>
                                     <TableCell v-if="!role.permissions">{{ role }}</TableCell>
-                                    <TableCell v-else class="space-x-2">
+                                    <TableCell v-else class="space-x-2 space-y-2">
                                         <Badge v-for="permission in role.permissions">
                                             {{ permission.name }}
                                         </Badge>
@@ -110,15 +118,7 @@ const excludedKeys = [
 
                     <div class="border-2 overflow-auto rounded-lg p-4">
                         <h1 class="text-lg font-bold mb-2">Frames</h1>
-                        <button
-                            v-for="(frame, index) in user?.frames" :key="index"
-                            class="
-                        bg-foreground/10 shadow-md
-                        focus:bg-secondary/10 dark:focus:bg-secondary/20
-                        focus:shadow-inner focus:ring focus:ring-primary/50
-                        text-center cursor-pointer rounded-sm overflow-hidden
-                        transition-all duration-300 ease-in-out m-2"
-                        >
+                        <button v-for="(frame, index) in user?.frames" :key="index" class="frame-card">
                             <div class="w-full flex gap-2 p-2">
                                 <badge v-if="frame.pivot.is_active">Active</badge>
                                 <badge>{{ frame.pivot.quantity }}</badge>
