@@ -1,11 +1,11 @@
-import { h, computed } from 'vue';
-import DropdownAction from '@/components/ui/data-table-dropdown.vue';
+import { computed, h } from 'vue';
 import { ArrowUpDown } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Frame } from '@/types';
 import { ColumnDef } from '@tanstack/vue-table';
 import Avatar from '@/components/Avatar.vue';
+import DropdownAction from '@/components/ui/data-table-dropdown.vue';
 
 export const columns: ColumnDef<Frame>[] = [
     {
@@ -64,7 +64,7 @@ export const columns: ColumnDef<Frame>[] = [
             h(
                 Button, {
                     variant: 'ghost',
-                    onClick: (): void => column.toggleSorting(column.getIsSorted() === 'asc'),
+                    onClick: (): void => column.toggleSorting(column.getIsSorted() === 'asc')
                 }, () => ['Price', h(ArrowUpDown, { class: 'size-4' })]
             ),
 
@@ -72,7 +72,7 @@ export const columns: ColumnDef<Frame>[] = [
             const amount = Number.parseFloat(row.getValue<string>('price'));
             const formatted = new Intl.NumberFormat('en-US', {
                 style: 'currency',
-                currency: 'USD',
+                currency: 'USD'
             }).format(amount);
 
             return h('div', { class: 'font-medium' }, formatted);
@@ -121,7 +121,10 @@ export const columns: ColumnDef<Frame>[] = [
         header: () => h('div', 'Actions'),
         cell: ({ row }) => {
             return h('div', { class: 'relative' }, [
-                h(DropdownAction as any, { onExpand: (): void => row.toggleExpanded?.() })
+                h(DropdownAction as any, {
+                    item: row.original, // Provide the required "item" prop
+                    onExpand: (): void => row.toggleExpanded?.()
+                })
             ]);
         }
     }

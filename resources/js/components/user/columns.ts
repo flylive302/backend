@@ -1,13 +1,13 @@
 import { h } from 'vue';
-import DropdownAction from '@/components/ui/data-table-dropdown.vue';
 import { ArrowUpDown } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar } from '@/components/ui/avatar';
 import { User } from '@/types';
 import { ColumnDef } from '@tanstack/vue-table';
-import { Badge } from '@/components/ui/badge';
 import { Link } from '@inertiajs/vue3';
+import DropdownAction from '@/components/ui/data-table-dropdown.vue';
+import { Badge } from '@/components/ui/badge';
 
 export const columns: ColumnDef<User>[] = [
     {
@@ -26,7 +26,7 @@ export const columns: ColumnDef<User>[] = [
         enableHiding: true
     },
     {
-        id: 'avatar_img',
+        accessorKey: 'avatar_img',
         header: ({ table }) => h('div', 'Avatar'),
         cell: ({ row }) => h(Avatar, {}, () => [
             h('AvatarImage', { src: row.getValue('avatar_img'), alt: '@unovue' }),
@@ -84,9 +84,13 @@ export const columns: ColumnDef<User>[] = [
         },
         cell: ({ row }) => {
             const roles = row.getValue('roles') as { name: string }[] | undefined;
-            return h('div', { class: 'flex gap-2 max-w-[300px] max-h-[60px] overflow-x-auto' }, roles?.map(role =>
-                h(Badge, role.name)
-            ) || '');
+            return h(
+                'div',
+                { class: 'flex gap-2 max-w-[300px] max-h-[60px] overflow-x-auto' },
+                roles?.map(role => {
+                    return h(Badge, { variant: 'success' }, { default: () => role.name });
+                }) || ''
+            );
         }
     },
     {
@@ -99,8 +103,9 @@ export const columns: ColumnDef<User>[] = [
             return h('div', { class: 'flex gap-2 items-center' }, [
                 h(Link, {
                     href: `/users/${row.getValue('id')}`,
-                    class: 'bg-primary px-2 py-1 rounded-md text-primary-foreground'
-                }, 'View'),
+                    class: 'bg-primary px-2 py-1 rounded-md text-primary-foreground',
+                    'aria-label': `View user with ID ${row.getValue('id')}`
+                }, { default: () => 'View' }),
                 h(DropdownAction as any, {
                     item: item, onExpand: () => row.toggleExpanded && row.toggleExpanded()
                 })
