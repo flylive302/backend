@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import type { BreadcrumbItem } from '@/types';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Avatar from '@/components/Avatar.vue';
 import Icon from '@/components/Icon.vue';
+import { Button } from '@/components/ui/button';
+import { computed } from 'vue';
 
 interface User {
     name: string;
@@ -15,7 +17,10 @@ interface CoinRequests {
     user: User;
     amount: number;
     message?: string;
-    type: number; // Adding 'type' property to match its usage in the template
+    type: number;
+    proof_1?: string;
+    proof_2?: string;
+    proof_3?: string;
 }
 
 const props = defineProps<{
@@ -29,31 +34,39 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 ];
 
-const excludedKeys = [
-    'id',
-    'user_id',
-    'requested_from',
-    'user'
-];
+const Page = usePage().props;
+
+const can = computed(() => Page.can as Record<string, boolean>);
+
 </script>
 
 <template>
 
-    <Head title="Coin Request" />
+    <Head :title="`${coinRequest.user.name} Requested ${coinRequest.amount} Coins for`" />
 
-    <AppLayout>
+    <AppLayout :breadcrumbs="breadcrumbs">
         <div class="border-2 overflow-auto rounded-lg m-6">
-            <div class="m-4 flex flex-col justify-center items-center gap-2">
+
+            <div class="m-4 flex flex-col md:flex-row items-center gap-2">
                 <Avatar
                     :frameDifference="0"
                     :profileDifference="0"
                     :profileSrc="coinRequest.user?.avatar_image ? coinRequest?.user?.avatar_image : '/default-image.jpg'"
                     :size="6"
                     alt="Profile Picture"
+                    class="min-w-[100px] min-h-[100px]"
                     frameSize="100"
                     profileSize="100"
                 />
+                <h1 class="text-2xl text-green-500 font-bold">
+                    {{ coinRequest.user.name }} Requested {{ Math.round(coinRequest.amount) }} Coins
+                </h1>
             </div>
+            <p v-if="coinRequest.user_id != Page.auth.user.id" class="ml-4 text-yellow-500">
+                Please Review the Request and take Action Very Carefully...
+                <br>
+                Because you will be held responsible for any action you take.
+            </p>
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -100,6 +113,33 @@ const excludedKeys = [
                             </div>
                         </TableCell>
                     </TableRow>
+                    <TableRow v-if="coinRequest.proof_1">
+                        <TableCell>
+                            <h2 class="text-lg font-bold">1st Proof of Payment:</h2>
+                        </TableCell>
+                        <TableCell>
+                            <img :src="`../../../../storage/${coinRequest.proof_1}`" alt=""
+                                 class="h-[500px] rounded-lg shadow-md">
+                        </TableCell>
+                    </TableRow>
+                    <TableRow v-if="coinRequest.proof_2">
+                        <TableCell>
+                            <h2 class="text-lg font-bold">2nd Proof of Payment:</h2>
+                        </TableCell>
+                        <TableCell>
+                            <img :src="`../../../../storage/${coinRequest.proof_2}`" alt=""
+                                 class="h-[500px] rounded-lg shadow-md">
+                        </TableCell>
+                    </TableRow>
+                    <TableRow v-if="coinRequest.proof_3">
+                        <TableCell>
+                            <h2 class="text-lg font-bold">3rd Proof of Payment:</h2>
+                        </TableCell>
+                        <TableCell>
+                            <img :src="`../../../../storage/${coinRequest.proof_3}`" alt=""
+                                 class="h-[500px] rounded-lg shadow-md">
+                        </TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
             <div v-if="coinRequest.message" class="px-4 my-2">
@@ -107,6 +147,11 @@ const excludedKeys = [
                 <div class="rounded-md flex justify-center gap-2 items-center p-2 font-bold bg-yellow-500/10">
                     {{ coinRequest.message }}
                 </div>
+            </div>
+
+            <div v-if="coinRequest.user_id != Page.auth.user.id" class="flex mt-5">
+                <Button class="w-full rounded-none" variant="success">Approve</Button>
+                <Button class="w-full rounded-none" variant="destructive">Reject</Button>
             </div>
         </div>
     </AppLayout>

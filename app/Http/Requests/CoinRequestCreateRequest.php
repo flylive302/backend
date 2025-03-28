@@ -17,9 +17,9 @@ class CoinRequestCreateRequest extends FormRequest
         return [
             'amount' => 'required|numeric|min:0.01',
             'message' => 'nullable|string|max:255',
-            'proof_1' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'proof_2' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'proof_3' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'proof_1' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+            'proof_2' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+            'proof_3' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'type' => 'required|integer|in:1,2',
             'credit_days' => 'nullable|integer|min:1|max:365',
         ];

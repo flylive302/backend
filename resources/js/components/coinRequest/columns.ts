@@ -70,15 +70,15 @@ export const columns: ColumnDef<CoinRequests>[] = [
         cell: ({ row }) => {
             const status = row.getValue('status') as number;
             const statusLabels: Record<number, string> = {
-                0: 'Pending',
-                1: 'Approved',
-                2: 'Rejected'
+                1: 'Pending',
+                2: 'Approved',
+                3: 'Rejected'
             };
 
             const statusColors: Record<number, string> = {
-                0: 'warning',
-                1: 'success',
-                2: 'destructive'
+                1: 'warning',
+                2: 'success',
+                3: 'destructive'
             };
 
             return h(
@@ -94,9 +94,9 @@ export const columns: ColumnDef<CoinRequests>[] = [
         cell: ({ row }) => {
             const type = row.getValue('type') as number;
             const typeLabels = {
-                1: 'Debit',
+                1: 'Cash',
                 2: 'Credit',
-                3: 'Cash'
+                3: 'Debit'
             };
 
             return h('div', typeLabels[type as keyof typeof typeLabels] || 'Unknown');

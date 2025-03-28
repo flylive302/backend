@@ -17,13 +17,18 @@ class CoinRequestController extends Controller
         $this->authorize('viewAnyCoinRequest', auth()->user());
 
         $requests = auth()->user()->coinRequestedFromMe()
-            ->with('user')->orderBy('created_at', 'asc')->get()->groupBy('status');
-        $pendingRequests = $requests->get(0, collect());
-        $approvedRequests = $requests->get(1, collect());
+            ->with('user')->orderBy('created_at', 'desc')
+            ->get()->groupBy('status');
+
+        $myRequests = auth()->user()->coinRequests()
+            ->orderBy('created_at', 'desc')
+            ->get()->groupBy('status');
 
         return Inertia::render('coinRequest/Index', [
-            'pending_requests' => $pendingRequests,
-            'approved_requests' => $approvedRequests,
+            'pending_requests' => $requests->get(1, collect()),
+            'approved_requests' => $requests->get(2, collect()),
+            'my_pending_requests' => $myRequests->get(1, collect()),
+            'my_approved_requests' => $myRequests->get(2, collect()),
         ]);
     }
 
@@ -41,22 +46,34 @@ class CoinRequestController extends Controller
     {
         $this->authorize('create', CoinRequest::class);
 
-        if ($request->type === 2 && empty($request->credit_days)) {
+        $data = [
+            'type' => $request->type,
+            'amount' => $request->amount,
+            'credit_days' => $request->credit_days,
+            'message' => $request->message,
+        ];
+
+        if ($data['type'] === 2 && empty($data['credit_days'])) {
             return response()->json(['error' => 'Credit days are required for credit requests.'], 422);
         }
 
         // File Upload Logic (if necessary)
         foreach (['proof_1', 'proof_2', 'proof_3'] as $proof) {
             if ($request->hasFile($proof)) {
-                $request[$proof] = $request->file($proof)->store('proofs', 'public');
+                $file = $request->file($proof);
+
+                $filename = time().'_'.$file->getClientOriginalName();
+
+                $path = $file->storeAs('proofs', $filename, 'public');
+                $data[$proof] = $path;
             }
         }
 
-        $request['user_id'] = auth()->id();
-        $request['requested_from'] = 1;
-        $request['status'] = 0;
+        $data['user_id'] = auth()->id();
+        $data['requested_from'] = 1;
+        $data['status'] = 1;
 
-        $coinRequest = CoinRequest::create($request->all());
+        $coinRequest = CoinRequest::create($data);
 
         return redirect()->route('coinRequest.show', $coinRequest);
 

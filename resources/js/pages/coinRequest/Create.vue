@@ -37,7 +37,7 @@ interface CoinRequest {
 const form = useForm<CoinRequest>({
     type: 1,
     amount: 1000,
-    credit_days: 7,
+    credit_days: null,
     message: '',
     proof_1: null,
     proof_2: null,
@@ -113,7 +113,7 @@ const submit = () => {
                             <Label for="proof_1">Proof Image or PDF 1 ( Optional )</Label>
                             <Input
                                 id="proof_1"
-                                accept=".png,.webp,.jpg,.jpeg,.pdf"
+                                accept=".png,.webp,.jpg,.jpeg"
                                 type="file"
                                 @change="(e: Event) => form.proof_1 = (e.target as HTMLInputElement).files?.[0] || null"
                             />
@@ -123,7 +123,7 @@ const submit = () => {
                             <Label for="proof_2">Proof Image or PDF 2 ( Optional )</Label>
                             <Input
                                 id="proof_2"
-                                accept=".png,.webp,.jpg,.jpeg,.pdf"
+                                accept=".png,.webp,.jpg,.jpeg"
                                 type="file"
                                 @change="(e: Event) => form.proof_2 = (e.target as HTMLInputElement).files?.[0] || null"
                             />
@@ -133,7 +133,7 @@ const submit = () => {
                             <Label for="proof_3">Proof Image or PDF 3 ( Optional )</Label>
                             <Input
                                 id="proof_3"
-                                accept=".png,.webp,.jpg,.jpeg,.pdf"
+                                accept=".png,.webp,.jpg,.jpeg"
                                 type="file"
                                 @change="(e: Event) => form.proof_3 = (e.target as HTMLInputElement).files?.[0] || null"
                             />
