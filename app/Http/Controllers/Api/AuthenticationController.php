@@ -27,7 +27,7 @@ class AuthenticationController extends Controller
             })
             ->collapse()->all();
 
-        $user['active_frame'] = $user->where('is_active', true)->first();
+        $user['active_frame'] = $user->wherePivot('is_active', true)->first();
 
         return $user;
     }
@@ -42,11 +42,10 @@ class AuthenticationController extends Controller
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:100'],
             'phone' => ['required', 'string', 'max:20', 'regex:/^\+[1-9]\d{1,14}$/', Rule::unique('users', 'phone')],
-            // Ensures valid E.164 format
-            'country' => ['required', 'string', 'size:2'], // 2-character country code (ISO 3166-1 alpha-2)
+            'country' => ['required', 'string', 'size:2'],
             'gender' => ['required', 'string', Rule::in(['male', 'female', 'others']), 'lowercase'],
             'dob' => ['required', 'date', 'before:-18 years'],
-            'password' => ['required', 'string', Password::defaults()], // Secure password rules
+            'password' => ['required', 'string', Password::defaults()],
         ]);
 
         $validatedData['signature'] = SignatureHelper::generate($validatedData['name']);
