@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, Frame, HelpingHand, LayoutGrid, UsersIcon } from 'lucide-vue-next';
+import { BookOpen, Coins, Folder, Frame, HelpingHand, LayoutGrid, UsersIcon } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { computed } from 'vue';
 import NavMain from '@/components/NavMain.vue';
@@ -42,6 +42,12 @@ const mainNavItems: NavItem[] = [
         href: route('coinRequest.index'),
         icon: HelpingHand,
         canAccess: can.value.viewAnyCoinRequest
+    },
+    {
+        title: 'Request Coins',
+        href: route('coinRequest.create'),
+        icon: Coins,
+        canAccess: can.value.createCoinRequest
     }
 ];
 

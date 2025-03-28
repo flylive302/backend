@@ -27,7 +27,7 @@ class CoinRequest extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id')->select(['id', 'name', 'signature', 'avatar_url']);
+        return $this->belongsTo(User::class, 'user_id')->select(['id', 'name', 'signature', 'avatar_image']);
     }
 
     public function requestedFrom(): BelongsTo

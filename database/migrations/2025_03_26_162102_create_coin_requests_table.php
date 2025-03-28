@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('proof_2', 255)->nullable();
             $table->string('proof_3', 255)->nullable();
             $table->unsignedTinyInteger('type');
-            $table->unsignedTinyInteger('status');
+            $table->unsignedTinyInteger('status')->default(0);
             $table->unsignedSmallInteger('credit_days')->nullable();
 
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

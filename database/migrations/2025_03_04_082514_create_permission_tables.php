@@ -132,7 +132,8 @@ return new class extends Migration {
             ->forget(config('permission.cache.key'));
 
         $permissions = [
-            'viewAnyUser', 'viewUser', 'viewAnyFrame', 'sendCoinsUser',
+            'viewAnyUser', 'viewUser',
+            'viewAnyFrame',
             'viewAnyCoinRequest', 'createCoinRequest', 'updateCoinRequest'
         ];
 

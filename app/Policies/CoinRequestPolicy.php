@@ -20,11 +20,7 @@ class CoinRequestPolicy
      */
     public function view(User $user, CoinRequest $coinRequest): bool
     {
-        if ($user->hasPermissionTo('viewAnyCoinRequest')) {
-            return true;
-        }
-
-        return $user->id === $coinRequest->user_id;
+        return $user->id === $coinRequest->user_id || $user->id === $coinRequest->requested_from;
     }
 
 

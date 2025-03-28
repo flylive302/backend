@@ -1,4 +1,4 @@
-import { computed, h } from 'vue';
+import { h } from 'vue';
 import { ArrowUpDown } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -6,6 +6,7 @@ import { Frame } from '@/types';
 import { ColumnDef } from '@tanstack/vue-table';
 import Avatar from '@/components/Avatar.vue';
 import DropdownAction from '@/components/ui/data-table-dropdown.vue';
+import ValidDuration from '@/components/ValidDuration.vue';
 
 export const columns: ColumnDef<Frame>[] = [
     {
@@ -82,37 +83,7 @@ export const columns: ColumnDef<Frame>[] = [
         accessorKey: 'valid_duration',
         header: () => h('div', 'Valid Duration'),
         cell: ({ row }) => {
-            const totalSeconds = row.getValue<number | undefined>('valid_duration');
-
-            if (!totalSeconds) {
-                return h('div', { class: 'font-medium' }, 'Never Expires');
-            } else {
-                const formattedDuration = computed((): string => {
-                    let secondsLeft = totalSeconds;
-                    const weeks = Math.floor(secondsLeft / (7 * 24 * 3600));
-                    secondsLeft %= (7 * 24 * 3600);
-
-                    const days = Math.floor(secondsLeft / (24 * 3600));
-                    secondsLeft %= (24 * 3600);
-
-                    const hours = Math.floor(secondsLeft / 3600);
-                    secondsLeft %= 3600;
-
-                    const minutes = Math.floor(secondsLeft / 60);
-                    const seconds = secondsLeft % 60;
-
-                    const parts: string[] = [];
-                    if (weeks > 0) parts.push(`${weeks} w`);
-                    if (days > 0) parts.push(`${days} d`);
-                    if (hours > 0) parts.push(`${hours} h`);
-                    if (minutes > 0) parts.push(`${minutes} m`);
-                    if (seconds > 0) parts.push(`${seconds} s`);
-
-                    return parts.join(' ');
-                });
-
-                return h('div', { class: 'font-medium' }, formattedDuration.value);
-            }
+            return h(ValidDuration, { totalSeconds: row.getValue<number>('valid_duration') });
         }
     },
     {

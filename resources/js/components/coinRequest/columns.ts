@@ -156,18 +156,10 @@ export const columns: ColumnDef<CoinRequests>[] = [
                 h(
                     Link,
                     {
-                        href: `/coin-requests/${requestId}/view`,
+                        href: route('coinRequest.show', { id: requestId }),
                         class: 'bg-primary px-2 py-1 rounded-md text-primary-foreground'
                     },
-                    'View'
-                ),
-                h(
-                    Link,
-                    {
-                        href: `/coin-requests/${requestId}/edit`,
-                        class: 'bg-secondary px-2 py-1 rounded-md text-secondary-foreground'
-                    },
-                    'Edit'
+                    { default: () => 'View' }
                 )
             ]);
         }

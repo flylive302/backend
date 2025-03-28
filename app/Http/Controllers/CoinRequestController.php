@@ -27,6 +27,12 @@ class CoinRequestController extends Controller
         ]);
     }
 
+    public function show(CoinRequest $coinRequest)
+    {
+        $this->authorize('view', $coinRequest);
+
+        return Inertia::render('coinRequest/Show', ['coinRequest' => $coinRequest->load('user')]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,7 +48,7 @@ class CoinRequestController extends Controller
         // File Upload Logic (if necessary)
         foreach (['proof_1', 'proof_2', 'proof_3'] as $proof) {
             if ($request->hasFile($proof)) {
-                $request->$proof = $request->file($proof)->store('proofs', 'public');
+                $request[$proof] = $request->file($proof)->store('proofs', 'public');
             }
         }
 
@@ -50,10 +56,17 @@ class CoinRequestController extends Controller
         $request['requested_from'] = 1;
         $request['status'] = 0;
 
-        $coinRequest = CoinRequest::create($request->validated());
+        $coinRequest = CoinRequest::create($request->all());
 
         return redirect()->route('coinRequest.show', $coinRequest);
 
+    }
+
+    public function create(Request $request)
+    {
+        $this->authorize('create', CoinRequest::class);
+
+        return Inertia::render('coinRequest/Create');
     }
 
     public function update(Request $request, CoinRequest $coinRequest)

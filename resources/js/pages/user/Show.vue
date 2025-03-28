@@ -77,13 +77,11 @@ const excludedKeys = [
                         </TableHeader>
 
                         <TableBody>
-                            <TableRow v-for="(value, key) in user" :key="key">
-                                <TableCell
-                                    v-if="!excludedKeys.includes(key)">
+                            <TableRow v-for="(value, key) in user" v-show="!excludedKeys.includes(key)" :key="key">
+                                <TableCell>
                                     {{ key }}
                                 </TableCell>
-                                <TableCell
-                                    v-if="!excludedKeys.includes(key)">
+                                <TableCell>
                                     {{ value }}
                                 </TableCell>
                             </TableRow>
