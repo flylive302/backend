@@ -15,6 +15,10 @@ const formattedDuration = computed(() => {
     // Work with a local copy so we don't modify the original value.
     let secondsLeft = props.totalSeconds;
 
+    if (secondsLeft == 0) {
+        return 'Forever Valid';
+    }
+
     // Calculate each time unit.
     const weeks = Math.floor(secondsLeft / (7 * 24 * 3600));
     secondsLeft %= (7 * 24 * 3600);

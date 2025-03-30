@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->decimal('amount', 16, 4);
             $table->string('message', 255)->nullable();
+            $table->string('action_message', 255)->nullable();
             $table->string('proof_1', 255)->nullable();
             $table->string('proof_2', 255)->nullable();
             $table->string('proof_3', 255)->nullable();

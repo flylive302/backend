@@ -19,6 +19,9 @@ class UserController extends Controller
     public function show(User $user)
     {
         $this->authorize('view', auth()->user());
+
+//        dd($user->load('roles.permissions', 'frames', 'initiatedTransactions', 'receivedTransactions')->toArray());
+
         return Inertia::render('user/Show', [
             'user' => $user->load('roles.permissions', 'frames', 'initiatedTransactions', 'receivedTransactions'),
         ]);

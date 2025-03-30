@@ -14,6 +14,7 @@ class CoinRequest extends Model
     protected $fillable = [
         'amount',
         'message',
+        'action_message',
         'proof_1',
         'proof_2',
         'proof_3',
@@ -27,12 +28,16 @@ class CoinRequest extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id')->select(['id', 'name', 'signature', 'avatar_image']);
+        return $this->belongsTo(User::class, 'user_id')->select([
+            'id', 'name', 'signature', 'avatar_image', 'coin_balance'
+        ]);
     }
 
     public function requestedFrom(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'requested_from');
+        return $this->belongsTo(User::class, 'requested_from')->select([
+            'id', 'name', 'signature', 'avatar_image', 'coin_balance'
+        ]);
     }
 
     public function updater(): BelongsTo
@@ -40,4 +45,10 @@ class CoinRequest extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'float',
+        ];
+    }
 }

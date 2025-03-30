@@ -83,7 +83,7 @@ export const columns: ColumnDef<Frame>[] = [
         accessorKey: 'valid_duration',
         header: () => h('div', 'Valid Duration'),
         cell: ({ row }) => {
-            return h(ValidDuration, { totalSeconds: row.getValue<number>('valid_duration') });
+            return h(ValidDuration, { totalSeconds: row.getValue<number>('valid_duration') == null ? 0 : row.getValue<number>('valid_duration') });
         }
     },
     {

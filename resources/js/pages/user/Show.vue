@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type BreadcrumbItem, User } from '@/types';
+import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -14,7 +14,7 @@ import Avatar from '@/components/Avatar.vue';
 
 const props = defineProps({
     user: {
-        type: Object as () => User,
+        type: Object,
         required: true
     }
 });
@@ -161,7 +161,7 @@ const excludedKeys = [
                     </TableHeader>
 
                     <TableBody>
-                        <TableRow v-for="transaction in user?.initiated_transactions" :key="transaction.id">
+                        <TableRow v-for="transaction in user?.initiated_transactions as any[]" :key="transaction.id">
                             <TableCell>{{ transaction.id }}</TableCell>
                             <TableCell>{{ transaction.beneficiary_id }}</TableCell>
                             <TableCell>{{ transaction.transactionable_type }}</TableCell>
@@ -198,7 +198,7 @@ const excludedKeys = [
                     </TableHeader>
 
                     <TableBody>
-                        <TableRow v-for="transaction in user?.initiated_transactions" :key="transaction.id">
+                        <TableRow v-for="transaction in user?.received_transactions" :key="transaction.id">
                             <TableCell>{{ transaction.id }}</TableCell>
                             <TableCell>{{ transaction.user_id }}</TableCell>
                             <TableCell>{{ transaction.transactionable_type }}</TableCell>

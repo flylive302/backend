@@ -131,6 +131,17 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'dob' => 'datetime:Y-m-d',
+            'gender' => 'integer',
+            'created_at' => 'datetime:Y-m-d',
+            'updated_at' => 'datetime:Y-m-d',
+            'deleted_at' => 'datetime:Y-m-d',
+            'blocked_at' => 'datetime:Y-m-d',
+            'seat_id' => 'integer',
+            'frame_id' => 'integer',
+            'social_provider_id' => 'integer',
+            'coin_balance' => 'float',
+            'diamond_balance' => 'float',
         ];
     }
 }

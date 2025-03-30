@@ -37,7 +37,7 @@ interface CoinRequest {
 const form = useForm<CoinRequest>({
     type: 1,
     amount: 1000,
-    credit_days: null,
+    credit_days: 7,
     message: '',
     proof_1: null,
     proof_2: null,
@@ -102,9 +102,13 @@ const submit = () => {
                     </div>
                     <div class="grid gap-2">
                         <Label for="message">Message (Optional)</Label>
-                        <Input id="message" v-model="form.message" autocomplete="message" class="mt-1 block w-full"
-                               placeholder="Full message"
-                               required />
+                        <Input
+                            id="message"
+                            v-model="form.message"
+                            autocomplete="message"
+                            class="mt-1 block w-full"
+                            placeholder="Full message"
+                        />
                         <InputError :message="form.errors.message" class="mt-2" />
                     </div>
 
@@ -143,7 +147,7 @@ const submit = () => {
 
 
                     <div v-else class="grid gap-2">
-                        <NumberField id="credit_days" v-model="form.credit_days" :default-value="7" :min="0">
+                        <NumberField id="credit_days" v-model="form.credit_days" :default-value="7" :min="1">
                             <Label for="credit_days">Credit Days you need for Coins</Label>
                             <NumberFieldContent>
                                 <NumberFieldDecrement />
@@ -154,7 +158,7 @@ const submit = () => {
                         <InputError :message="form.errors.credit_days" class="mt-2" />
                     </div>
 
-                    <Button class="w-full" size="lg" type="submit" @click="submit">Make A Request</Button>
+                    <Button class="w-full" size="lg" type="submit">Make A Request</Button>
                 </form>
             </div>
 

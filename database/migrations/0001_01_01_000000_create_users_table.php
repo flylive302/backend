@@ -62,6 +62,7 @@ return new class extends Migration {
             'country' => 'pk',
             'password' => Hash::make('admin@flylive.com'),
             'signature' => '@admin',
+            'coin_balance' => 10000
         ]);
 
         User::create([

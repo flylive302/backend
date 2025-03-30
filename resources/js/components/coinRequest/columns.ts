@@ -93,13 +93,19 @@ export const columns: ColumnDef<CoinRequests>[] = [
         header: 'Type',
         cell: ({ row }) => {
             const type = row.getValue('type') as number;
-            const typeLabels = {
+            const typeLabels: Record<number, string> = {
                 1: 'Cash',
-                2: 'Credit',
-                3: 'Debit'
+                2: 'Credit'
             };
 
-            return h('div', typeLabels[type as keyof typeof typeLabels] || 'Unknown');
+            const typeColors: Record<number, string> = {
+                1: 'success',
+                2: 'warning'
+            };
+
+            return h(
+                Badge, { variant: typeColors[type] as any }, () => typeLabels[type] || 'Unknown'
+            );
         }
     },
 
