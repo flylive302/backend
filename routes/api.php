@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticationController;
+use App\Http\Controllers\Api\CoinRequestController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\FrameController;
 use Illuminate\Support\Facades\Route;
@@ -26,11 +27,17 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/signed-url', [FileUploadController::class, 'getSignedUrl']);
 
     Route::controller(FrameController::class)->group(function () {
-        Route::get('/frame/all', 'getFrames')->name('frame.getFrames');
-        Route::get('/frame/my-frames', 'getMyFrames')->name('frame.getMyFrames');
+        Route::get('/frame/all', 'getFrames');
+        Route::get('/frame/my-frames', 'getMyFrames');
 
-        Route::post('/frame/{frame}/purchase', 'purchase')->name('frame.purchase');
-        Route::post('/frame/{frame}/activate', 'activate')->name('frame.activate');
+        Route::post('/frame/{frame}/purchase', 'purchase');
+        Route::post('/frame/{frame}/activate', 'activate');
+    });
+
+    Route::controller(CoinRequestController::class)->group(function () {
+        Route::get('/coin-resellers', 'getCoinResellers');
+        Route::post('/coin-requests', 'store');
+        Route::get('/coin-requests/{coinRequest}/show', 'show');
     });
 });
 

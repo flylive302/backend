@@ -44,9 +44,6 @@ class CoinRequestController extends Controller
         return Inertia::render('coinRequest/Show', ['coinRequest' => $coinRequest->load('user')]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CoinRequestCreateRequest $request)
     {
         $this->authorize('create', CoinRequest::class);

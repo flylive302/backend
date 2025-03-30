@@ -21,15 +21,15 @@ class AuthenticationController extends Controller
     {
         $user = $request->user();
 
-        $user['can'] = $user?->getPermissionsViaRoles()
-            ->map(function (Permission $permission): array {
-                return [$permission['name'] => auth()->user()->can($permission['name'])];
-            })
-            ->collapse()->all();
+        $user['can'] = $user?->getPermissionsViaRoles()->map(function (Permission $permission): array {
+            return [$permission['name'] => auth()->user()->can($permission['name'])];
+        })->collapse()->all();
 
-        $user['active_frame'] = $user->wherePivot('is_active', true)->first();
+        $user['active_frame'] = $user->frames()->wherePivot('is_active', true)->select([
+            'animated_src', 'static_src'
+        ])->first();
 
-        return $user;
+        return response()->json($user);
     }
 
     public function getUserById(User $user)
