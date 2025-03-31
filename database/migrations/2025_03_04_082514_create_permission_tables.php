@@ -154,6 +154,7 @@ return new class extends Migration {
 
         User::find(1)?->assignRole('admin');
         User::find(2)?->assignRole('reseller');
+        User::find(3)?->assignRole('reseller');
     }
 
     /**

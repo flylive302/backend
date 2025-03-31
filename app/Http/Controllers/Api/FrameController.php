@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Frame;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -56,12 +57,8 @@ class FrameController extends Controller
             'expires_at' => $newExpiry,
         ];
 
-        $afterTransaction = $user->coin_balance - $frame->price;
-
-        $user->update([
-            'coin_balance' => $afterTransaction,
-            'wealth_xp' => $frame->price * 10
-        ]);
+        $user->decrement('coin_balance', $frame->price);
+        User::find(1)->increment('coin_balance', $frame->price);
 
         // Update or attach frame to user
         if ($existingFrame) {
@@ -80,7 +77,7 @@ class FrameController extends Controller
             'real_value' => $frame->price,
             'change_in_value' => $frame->price,
             'before' => $user->coin_balance,
-            'after' => $afterTransaction,
+            'after' => $user->coin_balance - $frame->price,
             'status' => 1,
         ]);
 

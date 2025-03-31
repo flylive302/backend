@@ -60,7 +60,7 @@ return new class extends Migration {
             'gender' => 'male',
             'dob' => '1999-01-01',
             'country' => 'pk',
-            'password' => Hash::make('admin@flylive.com'),
+            'password' => Hash::make('password'),
             'signature' => '@admin',
             'coin_balance' => 10000
         ]);
@@ -71,9 +71,20 @@ return new class extends Migration {
             'email' => 'reseller@flylive.com',
             'gender' => 'male',
             'dob' => '1999-01-01',
-            'country' => 'pk',
-            'password' => Hash::make('reseller@flylive.com'),
+            'country' => 'uk',
+            'password' => Hash::make('password'),
             'signature' => '@reseller',
+        ]);
+
+        User::create([
+            'name' => 'Admin Irfan',
+            'phone' => '+923005274304',
+            'email' => 'adminirfan@flylive.com',
+            'gender' => 'male',
+            'dob' => '1999-01-01',
+            'country' => 'pk',
+            'password' => Hash::make('password'),
+            'signature' => '@AdminIrfanTheOGReseller',
         ]);
     }
 
