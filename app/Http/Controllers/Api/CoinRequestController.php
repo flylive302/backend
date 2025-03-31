@@ -19,7 +19,7 @@ class CoinRequestController extends Controller
         return response()->json($resellers);
     }
 
-    public function store(CoinRequestCreateRequest $request)
+    public function store(User $user, CoinRequestCreateRequest $request)
     {
         $data = $request->validated();
 
@@ -35,8 +35,7 @@ class CoinRequestController extends Controller
         }
 
         $data['user_id'] = auth()->id();
-        $data['requested_from'] = 1;
-        $data['status'] = 1;
+        $data['requested_from'] = $user->id;
 
         $coinRequest = CoinRequest::create($data);
 

@@ -69,7 +69,7 @@ class FrameController extends Controller
 
         Transaction::create([
             'user_id' => $user->id,
-            'beneficiary_id' => $user->id,
+            'beneficiary_id' => 1,
             'transactionable_id' => $frame->id,
             'transactionable_type' => Frame::class,
             'currency_type' => 1,

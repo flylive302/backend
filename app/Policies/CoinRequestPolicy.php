@@ -37,7 +37,7 @@ class CoinRequestPolicy
      */
     public function update(User $user, CoinRequest $coinRequest): bool
     {
-        return $user->hasPermissionTo('updateCoinRequest');
+        return $coinRequest->requested_from === $user->id;
     }
 
     /**

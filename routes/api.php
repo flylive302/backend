@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::controller(CoinRequestController::class)->group(function () {
         Route::get('/coin-resellers', 'getCoinResellers');
-        Route::post('/coin-requests', 'store');
+        Route::post('/coin-requests/{user}', 'store');
         Route::get('/coin-requests/{coinRequest}/show', 'show');
     });
 });
