@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -15,12 +14,29 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        $role = Role::create(['name' => 'admin']);
-        $permission = Permission::create(['name' => 'viewAny:user']);
+        $permissions = [
+            'viewAnyUser', 'viewUser',
+            'viewAnyFrame',
+            'viewAnyCoinRequest', 'createCoinRequest', 'updateCoinRequest'
+        ];
 
-        $role->givePermissionTo($permission);
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
 
-        $user = User::find(1);
-        $user->assignRole($role);
+        $adminPermissions = [
+            'viewAnyUser', 'viewUser',
+            'viewAnyCoinRequest', 'updateCoinRequest',
+            'viewAnyFrame',
+        ];
+
+        $resellerPermissions = ['viewAnyCoinRequest', 'createCoinRequest'];
+
+        Role::firstOrCreate(['name' => 'admin'])->givePermissionTo($adminPermissions);
+        Role::firstOrCreate(['name' => 'reseller'])->givePermissionTo($resellerPermissions);
+
+        User::find(1)?->assignRole('admin');
+        User::find(2)?->assignRole('reseller');
+        User::find(3)?->assignRole('reseller');
     }
 }

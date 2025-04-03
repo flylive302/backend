@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -15,15 +13,17 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->index();
-            $table->string('signature', 50)->unique();
-            $table->string('phone', 20)->nullable()->unique();
             $table->string('email', 255)->unique();
+            $table->string('phone', 20)->nullable()->unique();
+            $table->string('signature', 50)->unique();
+            $table->string('password', 255);
             $table->char('country', 2)->nullable()->index();
             $table->unsignedTinyInteger('gender')->nullable();
             $table->date('dob')->nullable();
-            $table->string('password', 255);
             $table->string('avatar_image')->nullable();
-            $table->boolean('is_blocked')->default(false);
+            $table->string('animated_src')->nullable();
+            $table->string('static_src')->nullable();
+            $table->boolean('is_blocked')->default(false)->index();
             $table->timestamp('blocked_at')->nullable();
             $table->string('block_reason', 255)->nullable();
             $table->string('social_provider', 50)->nullable();
@@ -33,9 +33,9 @@ return new class extends Migration {
             $table->decimal('wealth_xp', 16, 4)->default(0);
             $table->decimal('charm_xp', 16, 4)->default(0);
             $table->decimal('room_xp', 16, 4)->default(0);
-            $table->softDeletes('deleted_at', 0);
-            $table->rememberToken();
             $table->timestamps();
+            $table->rememberToken();
+            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -52,40 +52,6 @@ return new class extends Migration {
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
-
-        User::create([
-            'name' => 'Admin user',
-            'phone' => '+923005274302',
-            'email' => 'admin@flylive.com',
-            'gender' => 'male',
-            'dob' => '1999-01-01',
-            'country' => 'pk',
-            'password' => Hash::make('password'),
-            'signature' => '@admin',
-            'coin_balance' => 10000
-        ]);
-
-        User::create([
-            'name' => 'Reseller user',
-            'phone' => '+923005274303',
-            'email' => 'reseller@flylive.com',
-            'gender' => 'male',
-            'dob' => '1999-01-01',
-            'country' => 'uk',
-            'password' => Hash::make('password'),
-            'signature' => '@reseller',
-        ]);
-
-        User::create([
-            'name' => 'Admin Irfan',
-            'phone' => '+923005274304',
-            'email' => 'adminirfan@flylive.com',
-            'gender' => 'male',
-            'dob' => '1999-01-01',
-            'country' => 'pk',
-            'password' => Hash::make('password'),
-            'signature' => '@AdminIrfanTheOGReseller',
-        ]);
     }
 
     /**

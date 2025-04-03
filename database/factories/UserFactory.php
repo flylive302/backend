@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Helpers\SignatureHelper;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
@@ -27,11 +28,12 @@ class UserFactory extends Factory
         $name = fake()->name();
         $signature = SignatureHelper::generate($name);
         return [
-            'signature' => $signature,
-            'phone' => fake()->e164PhoneNumber(),
             'name' => $name,
-            'dob' => fake()->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
+            'signature' => $signature,
+            'email' => fake()->unique()->safeEmail(),
+            'phone' => fake()->e164PhoneNumber(),
             'gender' => fake()->numberBetween(1, 3),
+            'dob' => fake()->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
             'country' => strtolower(fake()->countryCode()),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
@@ -43,7 +45,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

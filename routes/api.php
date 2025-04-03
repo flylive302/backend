@@ -27,7 +27,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/signed-url', [FileUploadController::class, 'getSignedUrl']);
 
     Route::controller(FrameController::class)->group(function () {
-        Route::get('/frame/all', 'getFrames');
+        Route::get('/frame/all', 'index');
         Route::get('/frame/my-frames', 'getMyFrames');
 
         Route::post('/frame/{frame}/purchase', 'purchase');

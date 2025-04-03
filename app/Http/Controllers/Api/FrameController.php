@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class FrameController extends Controller
 {
-    public function getFrames(): JsonResponse
+    public function index(): JsonResponse
     {
         return response()->json(Frame::all());
     }
@@ -78,7 +78,6 @@ class FrameController extends Controller
             'change_in_value' => $frame->price,
             'before' => $user->coin_balance,
             'after' => $user->coin_balance - $frame->price,
-            'status' => 1,
         ]);
 
         return response()->json(['message' => 'Frame attached to user successfully.']);

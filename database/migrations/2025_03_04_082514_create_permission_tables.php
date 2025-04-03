@@ -1,11 +1,8 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 return new class extends Migration {
     /**
@@ -130,31 +127,6 @@ return new class extends Migration {
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
             ->forget(config('permission.cache.key'));
-
-        $permissions = [
-            'viewAnyUser', 'viewUser',
-            'viewAnyFrame',
-            'viewAnyCoinRequest', 'createCoinRequest', 'updateCoinRequest'
-        ];
-
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
-        }
-
-        $adminPermissions = [
-            'viewAnyUser', 'viewUser',
-            'viewAnyCoinRequest', 'updateCoinRequest',
-            'viewAnyFrame',
-        ];
-
-        $resellerPermissions = ['viewAnyCoinRequest', 'createCoinRequest'];
-
-        Role::firstOrCreate(['name' => 'admin'])->givePermissionTo($adminPermissions);
-        Role::firstOrCreate(['name' => 'reseller'])->givePermissionTo($resellerPermissions);
-
-        User::find(1)?->assignRole('admin');
-        User::find(2)?->assignRole('reseller');
-        User::find(3)?->assignRole('reseller');
     }
 
     /**
