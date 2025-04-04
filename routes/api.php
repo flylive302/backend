@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\CoinRequestController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\FrameController;
+use App\Http\Controllers\Api\RoomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health_check', function () {
@@ -38,6 +39,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/coin-resellers', 'getCoinResellers');
         Route::post('/coin-requests/{user}', 'store');
         Route::get('/coin-requests/{coinRequest}/show', 'show');
+    });
+
+    Route::controller(RoomController::class)->group(function () {
+        Route::get('/rooms', 'index');
+        Route::get('/room/{room}/view', 'show');
     });
 });
 

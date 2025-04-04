@@ -42,6 +42,8 @@ class User extends Authenticatable
         'deleted_at',
         'name',
         'avatar_image',
+        'animated_src',
+        'static_src',
         'coin_balance',
         'diamond_balance'
     ];
@@ -119,6 +121,11 @@ class User extends Authenticatable
     public function coinRequestedFromMe()
     {
         return $this->hasMany(CoinRequest::class, 'requested_from');
+    }
+
+    public function room()
+    {
+        return $this->hasOne(Room::class);
     }
 
     /**

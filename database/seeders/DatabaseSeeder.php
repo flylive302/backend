@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
+        $admin = User::create([
             'name' => 'Admin user',
             'phone' => '+923005274302',
             'email' => 'admin@flylive.com',
@@ -27,7 +27,12 @@ class DatabaseSeeder extends Seeder
             'coin_balance' => 10000
         ]);
 
-        User::create([
+        $admin->room()->create([
+            'name' => $admin->signature,
+            'country' => $admin->country,
+        ]);
+
+        $reseller1 = User::create([
             'name' => 'Reseller user',
             'phone' => '+923005274303',
             'email' => 'reseller@flylive.com',
@@ -38,7 +43,12 @@ class DatabaseSeeder extends Seeder
             'signature' => '@reseller',
         ]);
 
-        User::create([
+        $reseller1->room()->create([
+            'name' => $reseller1->signature,
+            'country' => $reseller1->country,
+        ]);
+
+        $reseller2 = User::create([
             'name' => 'Admin Irfan',
             'phone' => '+923005274304',
             'email' => 'adminirfan@flylive.com',
@@ -47,6 +57,11 @@ class DatabaseSeeder extends Seeder
             'country' => 'pk',
             'password' => Hash::make('password'),
             'signature' => '@AdminIrfanTheOGReseller',
+        ]);
+
+        $reseller2->room()->create([
+            'name' => $reseller2->signature,
+            'country' => $reseller2->country,
         ]);
 
 //        User::factory(10)->create();

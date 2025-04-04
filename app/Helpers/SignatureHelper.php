@@ -10,16 +10,16 @@ class SignatureHelper
     /**
      * Generate a unique signature based on the user's name.
      *
-     * @param string $name
+     * @param  string  $name
      * @return string
      */
     public static function generate($name)
     {
-        $signature = '#' . Str::slug($name, '_') . '_' . Str::random(6);
+        $signature = '@'.Str::slug($name, '_').'_'.rand(2, 50);
 
         // Ensure uniqueness in the users table
         while (User::where('signature', $signature)->exists()) {
-            $signature = '#' . Str::slug($name, '_') . '_' . Str::random(6); // Generate a Unique Slug again
+            $signature = '#'.Str::slug($name, '_').'_'.rand(2, 50); // Generate a Unique Slug again
         }
 
         return $signature;

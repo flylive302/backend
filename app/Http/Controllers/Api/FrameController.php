@@ -91,6 +91,11 @@ class FrameController extends Controller
         ]);
         auth()->user()->frames()->updateExistingPivot($frame->id, ['is_active' => true]);
 
+        auth()->user()->update([
+            'animated_src' => $frame->animated_src,
+            'static_src' => $frame->static_src,
+        ]);
+
         return response()->json([
             'message' => 'Frame Activated successfully.',
         ]);

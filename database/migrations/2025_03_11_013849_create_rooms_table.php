@@ -24,9 +24,9 @@ return new class extends Migration {
             $table->boolean('is_hidden')->default(false)->index();
             $table->string('password')->nullable();
             $table->tinyInteger('type')->default(1);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent()->index();
+            $table->timestamp('updated_at');
             $table->softDeletes();
-            $table->index(['popularity_index', 'is_hidden', 'country', 'created_at']);
         });
     }
 

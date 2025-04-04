@@ -29,6 +29,8 @@ class AuthenticationController extends Controller
             'animated_src', 'static_src'
         ])->first();
 
+        $user['room'] = $user->room;
+
         return response()->json($user);
     }
 
@@ -55,6 +57,11 @@ class AuthenticationController extends Controller
         $validatedData['email'] = $validatedData['signature'].'@flylive.com';
 
         $user = User::create($validatedData);
+
+        $user->room()->create([
+            'name' => $user->signature,
+            'country' => $user->country,
+        ]);
 
         return response()->json([
             'token' => $user->createToken('auth_token')->plainTextToken,
