@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('rewards', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('rewardable_id')->index();
+            $table->string('rewardable_type', 255);
+            $table->unsignedBigInteger('level_id')->index();
+            $table->string('name', 100);
+            $table->tinyInteger('type');
+            $table->decimal('value', 8, 2);
+            $table->unsignedBigInteger('valid_duration_seconds');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

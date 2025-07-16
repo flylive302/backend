@@ -13,6 +13,8 @@ return new class extends Migration {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('theme_id')->nullable();
+            $table->foreign('theme_id')->references('id')->on('themes')->onDelete('set null');
             $table->unsignedInteger('popularity_index')->default(0)->index();
             $table->char('country', 2)->index();
             $table->string('name', 100)->unique();

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Theme;
+use App\Models\Visitor;
 
 class Room extends Model
 {
@@ -41,6 +43,16 @@ class Room extends Model
     public function seats(): HasMany|Room
     {
         return $this->hasMany(Seat::class);
+    }
+
+    public function theme(): BelongsTo
+    {
+        return $this->belongsTo(Theme::class);
+    }
+
+    public function visitors(): HasMany
+    {
+        return $this->hasMany(Visitor::class);
     }
 
     protected function casts(): array

@@ -13,6 +13,8 @@ return new class extends Migration {
         Schema::create('seats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('room_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id')->nullable()->unique();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->tinyInteger('status')->default(0)->index();
             $table->boolean('is_muted')->default(false);
             $table->timestamps();

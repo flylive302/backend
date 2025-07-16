@@ -12,6 +12,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Level;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Seat;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Visitor;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Message;
 
 class User extends Authenticatable
 {
@@ -126,6 +133,47 @@ class User extends Authenticatable
     public function room()
     {
         return $this->hasOne(Room::class);
+    }
+
+    public function levels(): BelongsToMany
+    {
+        return $this->belongsToMany(Level::class)
+            ->withPivot([
+                'is_active',
+                'type',
+                'points_before',
+                'points_after',
+                'achieved_at',
+                'lost_at',
+                'deleted_at',
+            ])
+            ->withTimestamps();
+    }
+
+    public function seat(): BelongsTo
+    {
+        return $this->belongsTo(Seat::class);
+    }
+
+    public function visitor(): HasOne
+    {
+        return $this->hasOne(Visitor::class);
+    }
+
+    /**
+     * Messages sent by this user.
+     */
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
+     * Messages received by this user.
+     */
+    public function receivedMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
     }
 
     /**

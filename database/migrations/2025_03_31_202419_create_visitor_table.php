@@ -10,14 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('visitor', function (Blueprint $table) {
+        Schema::create('visitors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('room_id')->constrained('rooms')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('is_banned')->default(false);
             $table->time('kicked_at')->nullable();
             $table->time('kicked_for')->nullable();
-            $table->timestamps();
+            $table->timestamp('joined_at')->nullable();
+            $table->timestamp('left_at')->nullable();
             $table->softDeletes();
         });
     }

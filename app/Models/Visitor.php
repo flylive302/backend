@@ -2,30 +2,33 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Seat extends Model
+class Visitor extends Model
 {
-    /** @use HasFactory<\Database\Factories\SeatFactory> */
-    use HasFactory;
+    protected $table = 'visitors';
 
     protected $fillable = [
         'room_id',
         'user_id',
-        'status',
-        'is_muted',
+        'is_banned',
+        'kicked_at',
+        'kicked_for',
+        'joined_at',
+        'left_at',
     ];
 
     protected $casts = [
         'room_id' => 'integer',
         'user_id' => 'integer',
-        'status' => 'integer',
-        'is_muted' => 'boolean',
+        'is_banned' => 'boolean',
+        'kicked_at' => 'string',
+        'kicked_for' => 'string',
+        'joined_at' => 'datetime',
+        'left_at' => 'datetime',
     ];
 
     public function room(): BelongsTo
@@ -33,8 +36,8 @@ class Seat extends Model
         return $this->belongsTo(Room::class);
     }
 
-    public function user(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
-}
+} 

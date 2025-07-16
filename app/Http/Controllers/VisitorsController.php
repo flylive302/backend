@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Visitors;
+use App\Models\Visitor;
 use Illuminate\Http\Request;
 
 class VisitorsController extends Controller
@@ -34,7 +34,7 @@ class VisitorsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Visitors $visitors)
+    public function show(Visitor $visitors)
     {
         //
     }
@@ -42,7 +42,7 @@ class VisitorsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Visitors $visitors)
+    public function edit(Visitor $visitors)
     {
         //
     }
@@ -50,7 +50,7 @@ class VisitorsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Visitors $visitors)
+    public function update(Request $request, Visitor $visitors)
     {
         //
     }
@@ -58,7 +58,7 @@ class VisitorsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Visitors $visitors)
+    public function destroy(Visitor $visitors)
     {
         //
     }

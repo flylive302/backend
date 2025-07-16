@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('gifts', function (Blueprint $table) {
             $table->id();
+            $table->unsignedTinyInteger('category')->index();
+            $table->string('name', 100);
+            $table->decimal('price', 8, 2);
+            $table->string('static_src', 255);
+            $table->char('animated_file_type', 30);
+            $table->string('animated_src', 255);
+            $table->unsignedInteger('animation_duration');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
