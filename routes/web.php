@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::inertia('/', 'Welcome')->name('home');
+Route::inertia('/docs', 'Docs')->name('docs');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
